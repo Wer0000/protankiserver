@@ -1,10 +1,10 @@
 package ua.lann.protankiserver.protocol.packets;
 
-import ua.lann.protankiserver.protocol.packets.PacketId;
-import ua.lann.protankiserver.protocol.packets.handlers.EncryptionInitialized;
+import ua.lann.protankiserver.protocol.packets.handlers.auth.RegisterVerifyUsername;
+import ua.lann.protankiserver.protocol.packets.handlers.base.EncryptionInitialized;
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
-import ua.lann.protankiserver.protocol.packets.handlers.Pong;
-import ua.lann.protankiserver.protocol.packets.handlers.ResourcesLoaded;
+import ua.lann.protankiserver.protocol.packets.handlers.base.Pong;
+import ua.lann.protankiserver.protocol.packets.handlers.base.ResourcesLoaded;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +17,7 @@ public class PacketHandlersRegistry {
         registerHandler(PacketId.CryptoInitialized, new EncryptionInitialized());
         registerHandler(PacketId.ResourcesLoaded, new ResourcesLoaded());
 
+        registerHandler(PacketId.RegisterVerifyUsername, new RegisterVerifyUsername());
     }
 
     public static void registerHandler(PacketId alias, IHandler codec) {

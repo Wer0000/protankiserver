@@ -64,7 +64,7 @@ public class ResourcesManager {
         if(!this.callbacks.containsKey(callbackId)) return;
 
         logger.info("Resource loaded: {}", ResourcesPack.getByCallbackId(callbackId));
-        this.callbacks.get(callbackId).onLoaded(callbackId);
+        this.callbacks.get(callbackId).onLoaded();
     }
 
     public void load(ResourcesPack pack, ResourceLoadedCallback callback) {

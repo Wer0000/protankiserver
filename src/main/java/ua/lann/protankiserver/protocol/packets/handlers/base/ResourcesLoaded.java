@@ -1,7 +1,8 @@
-package ua.lann.protankiserver.protocol.packets.handlers;
+package ua.lann.protankiserver.protocol.packets.handlers.base;
 
 import io.netty.buffer.ByteBuf;
 import ua.lann.protankiserver.ClientController;
+import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 
 public class ResourcesLoaded implements IHandler {
     @Override

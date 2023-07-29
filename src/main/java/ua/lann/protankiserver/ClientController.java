@@ -8,14 +8,20 @@ import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.protocol.Encryption;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.resources.ResourcesManager;
+import ua.lann.protankiserver.screens.ScreenBase;
+import ua.lann.protankiserver.screens.auth.AuthorizationScreen;
+
+import java.util.HashMap;
 
 public class ClientController {
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     private final SocketChannel socket;
     protected final Encryption encryption;
+    private final HashMap<Class<? extends ScreenBase>, ScreenBase> screens;
 
     private String locale;
+    private ScreenBase screen;
 
     public final ResourcesManager resources;
 
@@ -25,7 +31,20 @@ public class ClientController {
         this.resources = new ResourcesManager(this);
 
         locale = "ru";
+        screens = new HashMap<>();
+        screens.put(AuthorizationScreen.class, new AuthorizationScreen(this));
     }
+
+    public ScreenBase getScreen() { return screen; }
+    public ScreenBase getScreenInstance(Class<? extends ScreenBase> screen) {
+        return screens.get(screen);
+    }
+
+    public void setScreen(Class<? extends ScreenBase> screen) {
+        this.screen = getScreenInstance(screen);
+        this.screen.open();
+    }
+
 
     public void setLocale(String locale) {
         if(!locale.equals("ru")) {

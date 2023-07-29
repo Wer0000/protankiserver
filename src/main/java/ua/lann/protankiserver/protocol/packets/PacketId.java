@@ -13,8 +13,12 @@ public enum PacketId {
     InitLoginPage(-1277343167),
     RemoveLoading(-1282173466),
 
+    RegisterVerifyUsername(1083705823),
+    UsernameAvailable(-706679202),
+    RecommendedNames(442888643),
+
     LoadResources(-1797047325),
-    ResourcesLoaded(-82304134);
+    ResourcesLoaded(-82304134),;
 
     public final int packetId;
 
