@@ -14,20 +14,20 @@ public class HibernateUtils {
     public static void setupSessionFactory() {
         Configuration config = new Configuration();
 
-        config.setProperty("connection.driver_class", "com.mysql.cj.jdbc.Driver");
+        config.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
 
-        config.setProperty("connection.url", "jdbc:mysql://localhost:3306/protanki");
-        config.setProperty("connection.username", "root");
-        config.setProperty("connection.password", "");
+        config.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/protanki");
+        config.setProperty("hibernate.connection.username", "root");
+        config.setProperty("hibernate.connection.password", "");
         config.setProperty("dialect", "com.mysql.cj.jdbc.Driver");
 
-        config.setProperty("show_sql", "false");
-        config.setProperty("format_sql", "true");
-        config.setProperty("hbm2ddl.auto", "update");
+        config.setProperty("hibernate.show_sql", "false");
+        config.setProperty("hibernate.format_sql", "true");
+        config.setProperty("hibernate.hbm2ddl.auto", "update");
 
         config.addAnnotatedClass(Player.class);
 
-        logger.info("Configured: {}@{}", config.getProperty("connection.username"), config.getProperty("connection.url"));
+        logger.info("Configured: {}@{}", config.getProperty("hibernate.connection.username"), config.getProperty("hibernate.connection.url"));
 
         builder = config.buildSessionFactory();
     }

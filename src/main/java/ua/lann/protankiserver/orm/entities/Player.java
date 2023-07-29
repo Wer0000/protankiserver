@@ -5,20 +5,31 @@ import lombok.Getter;
 import lombok.Setter;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
+import ua.lann.protankiserver.security.BCryptHasher;
 
 @Entity
 public class Player {
-    @Id
-    private String nickname;
+    @Getter
+    @Id private String nickname;
+
+    @Getter
+    @Column private String password;
 
     @Getter @Setter
-    @Column private int crystals;
+    @Column private int crystals = 0;
 
     @Getter @Setter
-    @Column private long experience;
+    @Column private long experience = 0;
 
     @Getter @Setter @Enumerated(EnumType.STRING)
     @Column private ChatModeratorLevel level = ChatModeratorLevel.None;
+
+    public Player() {}
+    public Player(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setPassword(String password) { this.password = BCryptHasher.hash(password); }
 
     public boolean canSpectate() { return level == ChatModeratorLevel.Moderator; }
     public Rank getRank() {

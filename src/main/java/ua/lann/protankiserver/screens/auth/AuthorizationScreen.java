@@ -4,11 +4,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.ServerSettings;
+import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.resources.ResourcesPack;
 import ua.lann.protankiserver.screens.ScreenBase;
+import ua.lann.protankiserver.security.BCryptHasher;
 
 public class AuthorizationScreen extends ScreenBase {
     private static final int LoginScreenBackground = 122842;
@@ -65,6 +67,24 @@ public class AuthorizationScreen extends ScreenBase {
 
         controller.sendPacket(PacketId.RemoveLoading, buffer);
         buffer.release();
+    }
+
+    public void removeLoginForm() {
+        this.controller.sendPacket(PacketId.RemoveLoginForm, Unpooled.buffer());
+    }
+
+    public void invalidCredentials() {
+        this.controller.sendPacket(PacketId.InvalidCredentials, Unpooled.buffer());
+    }
+
+    public void authorize(Player player, String password) {
+        boolean isPasswordValid = BCryptHasher.verify(player.getPassword(), password);
+        if(!isPasswordValid) {
+            this.invalidCredentials();
+            return;
+        }
+
+        this.controller.alert("Success!");
     }
 
     @Override

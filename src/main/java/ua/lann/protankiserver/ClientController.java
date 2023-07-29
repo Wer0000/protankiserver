@@ -3,10 +3,13 @@ package ua.lann.protankiserver;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.socket.SocketChannel;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.protocol.Encryption;
+import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
+import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.resources.ResourcesManager;
 import ua.lann.protankiserver.screens.ScreenBase;
 import ua.lann.protankiserver.screens.auth.AuthorizationScreen;
@@ -21,6 +24,7 @@ public class ClientController {
     private final HashMap<Class<? extends ScreenBase>, ScreenBase> screens;
 
     private String locale;
+    @Getter
     private ScreenBase screen;
 
     public final ResourcesManager resources;
@@ -35,7 +39,6 @@ public class ClientController {
         screens.put(AuthorizationScreen.class, new AuthorizationScreen(this));
     }
 
-    public ScreenBase getScreen() { return screen; }
     public ScreenBase getScreenInstance(Class<? extends ScreenBase> screen) {
         return screens.get(screen);
     }
@@ -44,7 +47,6 @@ public class ClientController {
         this.screen = getScreenInstance(screen);
         this.screen.open();
     }
-
 
     public void setLocale(String locale) {
         if(!locale.equals("ru")) {
@@ -76,6 +78,16 @@ public class ClientController {
 
         logger.info("Sent [{}]: {} bytes", packetId, packet.readableBytes());
         socket.writeAndFlush(packet);
+    }
+
+    public void alert(String message) {
+        ByteBuf buf = Unpooled.buffer();
+
+        ICodec<String> stringICodec = CodecRegistry.getCodec(String.class);
+        stringICodec.encode(buf, message);
+
+        this.sendPacket(PacketId.MessageAlert, buf);
+        buf.release();
     }
 
     public static String toHexString(ByteBuf byteBuf) {

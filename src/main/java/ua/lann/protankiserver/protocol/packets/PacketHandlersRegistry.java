@@ -1,5 +1,7 @@
 package ua.lann.protankiserver.protocol.packets;
 
+import ua.lann.protankiserver.protocol.packets.handlers.RequestCaptcha;
+import ua.lann.protankiserver.protocol.packets.handlers.auth.Register;
 import ua.lann.protankiserver.protocol.packets.handlers.auth.RegisterVerifyUsername;
 import ua.lann.protankiserver.protocol.packets.handlers.base.EncryptionInitialized;
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
@@ -17,6 +19,9 @@ public class PacketHandlersRegistry {
         registerHandler(PacketId.CryptoInitialized, new EncryptionInitialized());
         registerHandler(PacketId.ResourcesLoaded, new ResourcesLoaded());
 
+        registerHandler(PacketId.RequestCaptcha, new RequestCaptcha());
+
+        registerHandler(PacketId.Register, new Register());
         registerHandler(PacketId.RegisterVerifyUsername, new RegisterVerifyUsername());
     }
 
