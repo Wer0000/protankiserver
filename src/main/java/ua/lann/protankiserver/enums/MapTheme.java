@@ -1,13 +1,14 @@
 package ua.lann.protankiserver.enums;
 
 public enum MapTheme {
-    Summer(0),
-    Winter(1),
-    Space(2),
-    SummerDay(3),
-    SummerNight(4),
-    WinterDay(5);
+    Summer,
+    Winter,
+    Space,
+    SummerDay,
+    SummerNight,
+    WinterDay;
 
-    public final int id;
-    MapTheme(int id) { this.id = id; }
+    public int getId() {
+        return ordinal();
+    }
 }
