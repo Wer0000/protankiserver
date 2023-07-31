@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.ServerSettings;
+import ua.lann.protankiserver.enums.Layout;
+import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
@@ -84,7 +86,19 @@ public class AuthorizationScreen extends ScreenBase {
             return;
         }
 
-        this.controller.alert("Success!");
+        removeLoginForm();
+
+        controller.setPlayer(player);
+        controller.getProfile().sendPremiumInfo();
+        controller.getProfile().sendProfileInfo();
+        controller.getProfile().sendEmailInfo();
+        controller.resources.loadSingle(115361);
+
+        controller.resources.load(new Integer[] {}, () -> {
+            // TODO: controller.getProfile().loadFriendList();
+            controller.initAchievements();
+            controller.loadLayout(Layout.Lobby, Layout.Lobby, true);
+        }, 1000);
     }
 
     @Override

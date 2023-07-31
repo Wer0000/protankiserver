@@ -19,7 +19,7 @@ public class Player {
     @Column private int crystals = 0;
 
     @Getter @Setter
-    @Column private long experience = 0;
+    @Column private int experience = 0;
 
     @Getter @Setter @Enumerated(EnumType.STRING)
     @Column private ChatModeratorLevel level = ChatModeratorLevel.None;

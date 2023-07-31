@@ -67,6 +67,15 @@ public class ResourcesManager {
         this.callbacks.get(callbackId).onLoaded();
     }
 
+    public void loadSingle(int resource) {
+        ByteBuf buf = Unpooled.buffer();
+
+        buf.writeInt(resource);
+        controller.sendPacket(PacketId.LoadSingleResource, buf);
+
+        buf.release();
+    }
+
     public void load(ResourcesPack pack, ResourceLoadedCallback callback) {
         load(resources.get(pack), callback, pack.callbackId);
     }

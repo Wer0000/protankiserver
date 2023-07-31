@@ -22,12 +22,27 @@ public enum PacketId {
 
     RemoveLoginForm(-1923286328),
     InvalidCredentials(103812952),
+    Login(-739684591),
 
     RequestCaptcha(-349828108),
     SetCaptcha(-1670408519),
 
     LoadResources(-1797047325),
-    ResourcesLoaded(-82304134),;
+    LoadSingleResource(834877801),
+    ResourcesLoaded(-82304134),
+
+    SetPremiumInfo(1405859779),
+    SetProfileInfo(907073245),
+    SetEmailInfo(613462801),
+    InitAchievements(602656160),
+
+    ConfirmLayoutAccessible(1118835050),
+    SetLayout(-593368100),
+
+    ConfigureLobbyChat(178154988),
+    SetLobbyChatDelay(744948472),
+    LoadMessagesHistory(-1263520410),
+    LobbyChatSendMessage(705454610);
 
     public final int packetId;
 

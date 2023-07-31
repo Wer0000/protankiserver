@@ -1,12 +1,14 @@
 package ua.lann.protankiserver.protocol.packets;
 
 import ua.lann.protankiserver.protocol.packets.handlers.RequestCaptcha;
+import ua.lann.protankiserver.protocol.packets.handlers.auth.Login;
 import ua.lann.protankiserver.protocol.packets.handlers.auth.Register;
 import ua.lann.protankiserver.protocol.packets.handlers.auth.RegisterVerifyUsername;
 import ua.lann.protankiserver.protocol.packets.handlers.base.EncryptionInitialized;
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 import ua.lann.protankiserver.protocol.packets.handlers.base.Pong;
 import ua.lann.protankiserver.protocol.packets.handlers.base.ResourcesLoaded;
+import ua.lann.protankiserver.protocol.packets.handlers.lobby.LobbyChatSendMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +22,12 @@ public class PacketHandlersRegistry {
         registerHandler(PacketId.ResourcesLoaded, new ResourcesLoaded());
 
         registerHandler(PacketId.RequestCaptcha, new RequestCaptcha());
-
-        registerHandler(PacketId.Register, new Register());
         registerHandler(PacketId.RegisterVerifyUsername, new RegisterVerifyUsername());
+        registerHandler(PacketId.Register, new Register());
+        registerHandler(PacketId.Login, new Login());
+
+        registerHandler(PacketId.LobbyChatSendMessage, new LobbyChatSendMessage());
+
     }
 
     public static void registerHandler(PacketId alias, IHandler codec) {

@@ -46,8 +46,12 @@ public enum Rank {
         return experience / 200000 + 1;
     }
 
+    public int getNumber() {
+        return ordinal() + 1;
+    }
+
     public Rank nextRank() {
-        int ordinal = ordinal() + 1;
-        return ordinal > 31 ? Rank.Legend : Rank.values()[ordinal];
+        int ordinal = getNumber() + 1;
+        return ordinal > 32 ? Rank.Legend : Rank.values()[ordinal];
     }
 }
