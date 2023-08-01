@@ -7,20 +7,52 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.lann.protankiserver.battles.BattleBase;
+import ua.lann.protankiserver.battles.BattlesManager;
+import ua.lann.protankiserver.battles.impl.DeathMatchBattle;
+import ua.lann.protankiserver.enums.BattleMode;
+import ua.lann.protankiserver.enums.BattleSuspictionLevel;
+import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.lobbychat.LobbyChat;
+import ua.lann.protankiserver.battles.map.MapManager;
+import ua.lann.protankiserver.models.BattleSettings;
+import ua.lann.protankiserver.models.PlayerProfile;
+import ua.lann.protankiserver.models.ProBattleSettings;
 
 import java.net.InetSocketAddress;
 
 public class Server {
-    private static Server instance;
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
+    @Getter private static Server instance;
     @Getter private LobbyChat lobbyChat;
 
     public static final int PORT = 1338;
-    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public void run() {
         instance = this;
+
+        logger.info("Loading maps...");
+        MapManager.loadMaps();
+
+        BattleBase battle = new DeathMatchBattle(
+                "ffffffff",
+                "Песочница DM",
+                MapManager.getMap("map_sandbox"),
+                new BattleSettings(
+                        BattleMode.DM,
+                        16,
+                        Rank.Generalissimo,
+                        Rank.Recruit,
+                        100,
+                        60 * 15
+                ),
+                BattleSuspictionLevel.None,
+                false,
+                new ProBattleSettings()
+        );
+
+        BattlesManager.addBattle(battle);
 
         logger.info("Starting lobby chat...");
         lobbyChat = new LobbyChat(this);
@@ -53,9 +85,5 @@ public class Server {
     public PlayerProfile tryGetOnlinePlayerProfile(String nickname) {
         // TODO: Retrieve player profile or null if player is offline
         return null;
-    }
-
-    public static Server getInstance() {
-        return instance;
     }
 }

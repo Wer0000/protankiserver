@@ -3,7 +3,7 @@ package ua.lann.protankiserver.lobbychat;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
-import ua.lann.protankiserver.PlayerProfile;
+import ua.lann.protankiserver.models.PlayerProfile;
 import ua.lann.protankiserver.Server;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
@@ -11,7 +11,6 @@ import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -115,6 +114,6 @@ public class LobbyChat {
 
     public void sendMessage(ClientController sender, ChatMessage msg) {
         this.messages.add(msg);
-        loadMessagesHistory(sender, Collections.singletonList(msg), false);
+        addMessages(sender, Collections.singletonList(msg), false);
     }
 }

@@ -1,4 +1,4 @@
-package ua.lann.protankiserver;
+package ua.lann.protankiserver.models;
 
 import lombok.Getter;
 import lombok.Setter;

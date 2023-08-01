@@ -16,7 +16,7 @@ public class Login implements IHandler {
         ICodec<String> stringICodec = CodecRegistry.getCodec(String.class);
         ICodec<Boolean> booleanICodec = CodecRegistry.getCodec(Boolean.class);
         
-        AuthorizationScreen screen = (AuthorizationScreen) channel.getScreenInstance(AuthorizationScreen.class);
+        AuthorizationScreen screen = (AuthorizationScreen) channel.getScreenManager().getScreenInstance(AuthorizationScreen.class);
 
         String nickname = stringICodec.decode(buf);
         String password = stringICodec.decode(buf);

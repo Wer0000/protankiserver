@@ -7,6 +7,6 @@ import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 public class ResourcesLoaded implements IHandler {
     @Override
     public void handle(ClientController channel, ByteBuf buf) {
-        channel.resources.notifyLoaded(buf.readInt());
+        channel.getResourcesManager().notifyLoaded(buf.readInt());
     }
 }

@@ -42,7 +42,16 @@ public enum PacketId {
     ConfigureLobbyChat(178154988),
     SetLobbyChatDelay(744948472),
     LoadMessagesHistory(-1263520410),
-    LobbyChatSendMessage(705454610);
+    LobbyChatSendMessage(705454610),
+
+    InitMapList(-838186985),
+    InitBattleList(552006706),
+
+    GetBattleInfo(2092412133),
+    SetBattleSelected(-602527073),
+    SendBattleInfo(546722394),
+
+    RequestUserInfo(1774907609);
 
     public final int packetId;
 

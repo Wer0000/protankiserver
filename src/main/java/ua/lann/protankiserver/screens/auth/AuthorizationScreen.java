@@ -4,14 +4,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.ServerSettings;
-import ua.lann.protankiserver.enums.Layout;
-import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.resources.ResourcesPack;
 import ua.lann.protankiserver.screens.ScreenBase;
+import ua.lann.protankiserver.screens.lobby.BattleSelectScreen;
 import ua.lann.protankiserver.security.BCryptHasher;
 
 public class AuthorizationScreen extends ScreenBase {
@@ -71,7 +70,8 @@ public class AuthorizationScreen extends ScreenBase {
         buffer.release();
     }
 
-    public void removeLoginForm() {
+    @Override
+    public void close() {
         this.controller.sendPacket(PacketId.RemoveLoginForm, Unpooled.buffer());
     }
 
@@ -86,18 +86,18 @@ public class AuthorizationScreen extends ScreenBase {
             return;
         }
 
-        removeLoginForm();
+        close();
 
         controller.setPlayer(player);
         controller.getProfile().sendPremiumInfo();
         controller.getProfile().sendProfileInfo();
         controller.getProfile().sendEmailInfo();
-        controller.resources.loadSingle(115361);
+        controller.getResourcesManager().loadSingle(115361);
 
-        controller.resources.load(new Integer[] {}, () -> {
+        controller.getResourcesManager().load(new Integer[] {}, () -> {
             // TODO: controller.getProfile().loadFriendList();
             controller.initAchievements();
-            controller.loadLayout(Layout.Lobby, Layout.Lobby, true);
+            controller.getScreenManager().setScreen(BattleSelectScreen.class);
         }, 1000);
     }
 
@@ -106,6 +106,6 @@ public class AuthorizationScreen extends ScreenBase {
         if(!socialButtonsInit) initSocialButtons();
         if(!captchaPositionsInit) initCaptchaPositions();
 
-        controller.resources.load(ResourcesPack.Main, this::openAuthScreen);
+        controller.getResourcesManager().load(ResourcesPack.Main, this::openAuthScreen);
     }
 }

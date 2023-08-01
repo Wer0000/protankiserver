@@ -1,26 +1,31 @@
-package ua.lann.protankiserver;
+package ua.lann.protankiserver.models;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.Setter;
+import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
+import ua.lann.protankiserver.models.PremiumInfo;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 
+@Getter
+@Setter
 public class PlayerProfile {
-    @Getter private final ClientController controller;
+    private final ClientController controller;
 
-    @Getter @Setter private String nickname;
+    private String nickname;
+    private ChatModeratorLevel chatModeratorLevel;
 
-    @Getter @Setter private Rank rank;
-    @Getter @Setter private int experience;
-    @Getter @Setter private int crystals;
+    private Rank rank;
+    private int experience;
+    private int crystals;
 
-    @Getter @Setter private ChatModeratorLevel chatModeratorLevel;
+    private PremiumInfo premiumInfo;
 
 
     public PlayerProfile(Player player, ClientController controller) {
@@ -32,6 +37,15 @@ public class PlayerProfile {
         this.experience = player.getExperience();
         this.crystals = player.getCrystals();
         this.chatModeratorLevel = player.getLevel();
+
+        this.premiumInfo = new PremiumInfo(
+                false,
+                false,
+                99665.5234375f,
+                true,
+                false,
+                16777235
+        );
     }
 
     public void sendPremiumInfo() {
@@ -39,12 +53,12 @@ public class PlayerProfile {
 
         ICodec<Boolean> booleanICodec = CodecRegistry.getCodec(Boolean.class);
 
-        booleanICodec.encode(buf, false); // needShowNotificationCompletionPremium
-        booleanICodec.encode(buf, false); // needShowWelcomeAlert
-        buf.writeFloat(99665.5234375f); // reminderCompletionPremiumTime
-        booleanICodec.encode(buf, true); // wasShowAlertForFirstPurchasePremium
-        booleanICodec.encode(buf, false); // wasShowReminderCompletionPremium
-        buf.writeInt(16777243); // Lifetime in seconds
+        booleanICodec.encode(buf, premiumInfo.isNeedShowNotificationCompletionPremium());
+        booleanICodec.encode(buf, premiumInfo.isNeedShowWelcomeAlert());
+        buf.writeFloat(premiumInfo.getReminderCompletionPremiumTime());
+        booleanICodec.encode(buf, premiumInfo.isWasShowAlertForFirstPurchasePremium());
+        booleanICodec.encode(buf, premiumInfo.isWasShowReminderCompletionPremium());
+        buf.writeInt(premiumInfo.getLifetimeInSeconds());
 
         controller.sendPacket(PacketId.SetPremiumInfo, buf);
         buf.release();
@@ -63,7 +77,7 @@ public class PlayerProfile {
         buf.writeInt(rank.maxExperience);
         buf.writeInt(1); // place
         buf.writeByte(rank.getNumber()); // why +1 lol
-        buf.writeInt(1777); // rating
+        buf.writeInt(1); // rating
         buf.writeInt(experience);
         buf.writeInt(1); // Server ID
 

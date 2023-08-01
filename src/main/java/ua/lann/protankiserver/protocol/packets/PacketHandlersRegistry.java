@@ -8,6 +8,7 @@ import ua.lann.protankiserver.protocol.packets.handlers.base.EncryptionInitializ
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 import ua.lann.protankiserver.protocol.packets.handlers.base.Pong;
 import ua.lann.protankiserver.protocol.packets.handlers.base.ResourcesLoaded;
+import ua.lann.protankiserver.protocol.packets.handlers.lobby.GetBattleInfo;
 import ua.lann.protankiserver.protocol.packets.handlers.lobby.LobbyChatSendMessage;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class PacketHandlersRegistry {
         registerHandler(PacketId.Login, new Login());
 
         registerHandler(PacketId.LobbyChatSendMessage, new LobbyChatSendMessage());
-
+        registerHandler(PacketId.GetBattleInfo, new GetBattleInfo());
     }
 
     public static void registerHandler(PacketId alias, IHandler codec) {

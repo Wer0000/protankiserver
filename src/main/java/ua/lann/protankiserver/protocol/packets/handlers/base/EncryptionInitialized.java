@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.ServerSettings;
+import ua.lann.protankiserver.localization.Locale;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
@@ -17,8 +18,8 @@ public class EncryptionInitialized implements IHandler {
     @Override
     public void handle(ClientController channel, ByteBuf buf) {
         channel.sendPacket(PacketId.Ping, Unpooled.buffer());
-        channel.setLocale(stringCodec.decode(buf));
+        channel.setLocale(Locale.fromString(stringCodec.decode(buf)));
 
-        channel.setScreen(AuthorizationScreen.class);
+        channel.getScreenManager().setScreen(AuthorizationScreen.class);
     }
 }

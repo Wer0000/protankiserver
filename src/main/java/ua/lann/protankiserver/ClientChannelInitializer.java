@@ -11,16 +11,14 @@ import ua.lann.protankiserver.protocol.packets.pipeline.PacketProcessor;
 public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
     private final Logger logger = LoggerFactory.getLogger(ChannelInitializer.class);
 
-    private ClientController controller;
-
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
-        controller = new ClientController(channel);
+        ClientController controller = new ClientController(channel);
         logger.info("Connection from {}", channel.remoteAddress().getAddress().getHostAddress());
 
-        channel.pipeline().addLast(new PacketProcessor(controller.encryption));
-        channel.pipeline().addLast(new PacketHandler(controller, controller.encryption));
+        channel.pipeline().addLast(new PacketProcessor(controller.getEncryption()));
+        channel.pipeline().addLast(new PacketHandler(controller, controller.getEncryption()));
 
-        controller.sendPacketUnencrypted(PacketId.InitializeCrypto, controller.encryption.encryptionPacket());
+        controller.sendPacketUnencrypted(PacketId.InitializeCrypto, controller.getEncryption().encryptionPacket());
     }
 }

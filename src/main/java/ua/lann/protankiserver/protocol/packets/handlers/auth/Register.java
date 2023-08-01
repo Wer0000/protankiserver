@@ -52,7 +52,7 @@ public class Register implements IHandler {
                 return;
             }
 
-            AuthorizationScreen screen = (AuthorizationScreen) channel.getScreenInstance(AuthorizationScreen.class);
+            AuthorizationScreen screen = (AuthorizationScreen) channel.getScreenManager().getScreenInstance(AuthorizationScreen.class);
             screen.authorize(player, password);
         }
     }

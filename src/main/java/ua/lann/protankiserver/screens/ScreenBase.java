@@ -10,4 +10,5 @@ public abstract class ScreenBase {
     }
 
     public abstract void open();
+    public abstract void close();
 }

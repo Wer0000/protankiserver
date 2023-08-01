@@ -4,110 +4,66 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.socket.SocketChannel;
 import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.enums.Achievement;
-import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Layout;
-import ua.lann.protankiserver.lobbychat.LobbyChat;
+import ua.lann.protankiserver.models.ClientLayout;
+import ua.lann.protankiserver.localization.Locale;
+import ua.lann.protankiserver.models.PlayerProfile;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.Encryption;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.resources.ResourcesManager;
-import ua.lann.protankiserver.screens.ScreenBase;
-import ua.lann.protankiserver.screens.auth.AuthorizationScreen;
-
-import java.util.HashMap;
+import ua.lann.protankiserver.screens.ScreenManager;
 
 public class ClientController {
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-    private final SocketChannel socket;
-    protected final Encryption encryption;
-    public final ResourcesManager resources;
+    @Getter private final SocketChannel socket;
+    @Getter private final Encryption encryption;
+    @Getter private final ResourcesManager resourcesManager;
 
     @Getter private final ClientLayout layout;
-    @Getter private String locale;
+    @Getter private Locale locale;
     @Getter private PlayerProfile profile;
 
-    private final HashMap<Class<? extends ScreenBase>, ScreenBase> screens;
-    @Getter private ScreenBase screen;
+    @Getter private final ScreenManager screenManager;
 
     public ClientController(SocketChannel socket) {
         this.socket = socket;
         this.encryption = new Encryption();
-        this.resources = new ResourcesManager(this);
+        this.resourcesManager = new ResourcesManager(this);
 
+        this.screenManager = new ScreenManager(this);
         layout = new ClientLayout();
-
-        locale = "ru";
-        screens = new HashMap<>();
-        screens.put(AuthorizationScreen.class, new AuthorizationScreen(this));
+        locale = Locale.Russian;
     }
 
     public void switchLayout() {
         ByteBuf buf = Unpooled.buffer();
 
-        buf.writeInt(layout.back.getId()); // back
-        buf.writeInt(layout.front.getId()); // front
+        buf.writeInt(layout.back.getId());
+        buf.writeInt(layout.front.getId());
 
-        switch (layout.front) {
-            case Lobby -> {
-                // TODO: chat, lobby, send battle infos
-                break;
-            }
-
-            case Garage -> {
-                // TODO: chat, garage
-                break;
-            }
-
-            default -> { break; }
-        }
-
+        logger.info("Switch layout: {} -> {}", layout.back, layout.front);
         sendPacket(PacketId.SetLayout, buf);
         buf.release();
     }
 
-    public void loadLayout(Layout layout, Layout back, boolean showNews) {
-        logger.info("Switch layout: {}, showNews: {}", layout, showNews);
-
+    public void loadLayout(Layout layout, Layout back) {
         this.layout.front = layout;
         this.layout.back = back;
 
         ByteBuf buf = Unpooled.buffer();
-
         buf.writeInt(layout.getId());
-        sendPacket(PacketId.ConfirmLayoutAccessible, buf);
 
+        sendPacket(PacketId.ConfirmLayoutAccessible, buf);
         buf.release();
 
-        if(showNews) {
-            // Todo: show news
-        }
-
-        switch (layout) {
-            case Lobby -> {
-                // TODO: Load maps list
-                // TODO: Load battle list
-                LobbyChat chat = Server.getInstance().getLobbyChat();
-                chat.addMember(this);
-
-                chat.configure(this);
-                chat.setupChatDelay(this);
-                chat.loadMessagesHistory(this, null, true);
-
-                switchLayout();
-                break;
-            }
-
-            default -> {
-                logger.warn("Unsupported layout: {}", layout);
-            }
-        }
+        switchLayout();
     }
 
     public void initAchievements() {
@@ -122,25 +78,11 @@ public class ClientController {
         buf.release();
     }
 
-    public ScreenBase getScreenInstance(Class<? extends ScreenBase> screen) {
-        return screens.get(screen);
-    }
 
     public void setPlayer(Player player) {
         this.profile = new PlayerProfile(player, this);
     }
-
-    public void setScreen(Class<? extends ScreenBase> screen) {
-        this.screen = getScreenInstance(screen);
-        this.screen.open();
-    }
-
-    public void setLocale(String locale) {
-        if(!locale.equals("ru")) {
-            logger.warn("Unsupported locale: {}", locale);
-            return;
-        }
-
+    public void setLocale(Locale locale) {
         this.locale = locale;
         logger.info("Locale set to: {}", locale);
     }
