@@ -3,6 +3,7 @@ package ua.lann.protankiserver.screens.auth;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
+import ua.lann.protankiserver.Server;
 import ua.lann.protankiserver.ServerSettings;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
@@ -95,9 +96,11 @@ public class AuthorizationScreen extends ScreenBase {
         controller.getResourcesManager().loadSingle(115361);
 
         controller.getResourcesManager().load(new Integer[] {}, () -> {
-            // TODO: controller.getProfile().loadFriendList();
+            controller.getFriendsManager().loadFriendsList();
             controller.initAchievements();
             controller.getScreenManager().setScreen(BattleSelectScreen.class);
+
+            Server.getInstance().addActiveController(controller);
         }, 1000);
     }
 

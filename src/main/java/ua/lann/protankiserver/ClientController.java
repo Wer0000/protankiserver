@@ -10,7 +10,7 @@ import ua.lann.protankiserver.enums.Achievement;
 import ua.lann.protankiserver.enums.Layout;
 import ua.lann.protankiserver.models.ClientLayout;
 import ua.lann.protankiserver.localization.Locale;
-import ua.lann.protankiserver.models.PlayerProfile;
+import ua.lann.protankiserver.models.profile.PlayerProfile;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.Encryption;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
@@ -29,6 +29,7 @@ public class ClientController {
     @Getter private final ClientLayout layout;
     @Getter private Locale locale;
     @Getter private PlayerProfile profile;
+    @Getter private final FriendsManager friendsManager;
 
     @Getter private final ScreenManager screenManager;
 
@@ -36,6 +37,7 @@ public class ClientController {
         this.socket = socket;
         this.encryption = new Encryption();
         this.resourcesManager = new ResourcesManager(this);
+        this.friendsManager = new FriendsManager(this);
 
         this.screenManager = new ScreenManager(this);
         layout = new ClientLayout();

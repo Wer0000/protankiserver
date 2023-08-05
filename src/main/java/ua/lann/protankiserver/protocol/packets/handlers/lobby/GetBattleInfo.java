@@ -6,7 +6,7 @@ import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.battles.BattleBase;
 import ua.lann.protankiserver.battles.BattlesManager;
-import ua.lann.protankiserver.models.BattleDisplayInfo;
+import ua.lann.protankiserver.models.battle.BattleDisplayInfo;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;

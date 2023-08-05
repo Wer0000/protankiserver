@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import ua.lann.protankiserver.battles.map.Map;
 import ua.lann.protankiserver.enums.BattleSuspictionLevel;
-import ua.lann.protankiserver.models.BattleDisplayInfo;
-import ua.lann.protankiserver.models.BattleListInfo;
-import ua.lann.protankiserver.models.BattleSettings;
-import ua.lann.protankiserver.models.ProBattleSettings;
+import ua.lann.protankiserver.models.battle.BattleDisplayInfo;
+import ua.lann.protankiserver.models.battle.BattleListInfo;
+import ua.lann.protankiserver.models.battle.BattleSettings;
+import ua.lann.protankiserver.models.battle.ProBattleSettings;
 
 @Getter
 @AllArgsConstructor

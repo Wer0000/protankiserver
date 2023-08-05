@@ -5,6 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.lann.protankiserver.FriendsManager;
+import ua.lann.protankiserver.orm.entities.FriendRequest;
 import ua.lann.protankiserver.orm.entities.Player;
 
 public class HibernateUtils {
@@ -26,6 +28,7 @@ public class HibernateUtils {
         config.setProperty("hibernate.hbm2ddl.auto", "update");
 
         config.addAnnotatedClass(Player.class);
+        config.addAnnotatedClass(FriendRequest.class);
 
         logger.info("Configured: {}@{}", config.getProperty("hibernate.connection.username"), config.getProperty("hibernate.connection.url"));
 

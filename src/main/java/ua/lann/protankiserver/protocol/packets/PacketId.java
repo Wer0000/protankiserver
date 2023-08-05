@@ -51,7 +51,32 @@ public enum PacketId {
     SetBattleSelected(-602527073),
     SendBattleInfo(546722394),
 
-    RequestUserInfo(1774907609);
+    RequestUserInfo(1774907609),
+    SetUserOnlineInfo(2041598093),
+    SetUserRankInfo(-962759489),
+    SetUserPremiumInfo(-2069508071),
+    NotifySomethingIDontKnow(1941694508),
+
+    LoadFriendsList(1422563374),
+    OpenFriendsList(1441234714),
+    SetFriendsListOpened(-437587751),
+
+    VerifyRequestedNicknameExists(126880779),
+    RequestedNicknameNotExists(-1490761936),
+    RequestedNicknameExists(-707501253),
+    SendFriendRequest(-1457773660),
+
+    AlreadyFriends(-2089008699),
+    AlreadyHasIncomingRequest(-1258754138),
+    AlreadySentFriendRequestToThatPlayer(2064692768),
+    RequestSent(-1241704092),
+    IncomingFriendRequest(553380510),
+    CancelFriendRequest(84050355),
+    NotifyFriendRequestCancelled(-1885167992),
+
+    AcceptFriendRequest(-1926185291),
+    RejectFriendRequest(-1588006900),
+    FriendRequestAccepted(-139645601);
 
     public final int packetId;
 

@@ -3,7 +3,7 @@ package ua.lann.protankiserver.lobbychat;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
-import ua.lann.protankiserver.models.PlayerProfile;
+import ua.lann.protankiserver.models.profile.PlayerProfile;
 import ua.lann.protankiserver.Server;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;

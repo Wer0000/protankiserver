@@ -7,6 +7,11 @@ import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.security.BCryptHasher;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 public class Player {
     @Getter
@@ -24,6 +29,22 @@ public class Player {
     @Getter @Setter @Enumerated(EnumType.STRING)
     @Column private ChatModeratorLevel level = ChatModeratorLevel.None;
 
+    @Getter
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "playerFriends",
+            joinColumns = @JoinColumn(name = "playerId"),
+            inverseJoinColumns = @JoinColumn(name = "friendId")
+    ) private final Set<Player> friends = new HashSet<>();
+
+    @Getter
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private final Set<FriendRequest> outgoingFriendRequests = new HashSet<>();
+
+    @Getter
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private final Set<FriendRequest> incomingFriendRequests = new HashSet<>();
+
     public Player() {}
     public Player(String nickname) {
         this.nickname = nickname;
@@ -37,6 +58,6 @@ public class Player {
             if(experience >= rank.minExperience && experience < rank.maxExperience) return rank;
         }
 
-        return Rank.Legend;
+        return Rank.Generalissimo;
     }
 }

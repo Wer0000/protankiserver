@@ -7,7 +7,7 @@ import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.enums.BattleMode;
-import ua.lann.protankiserver.models.BattleLimit;
+import ua.lann.protankiserver.models.battle.BattleLimit;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;

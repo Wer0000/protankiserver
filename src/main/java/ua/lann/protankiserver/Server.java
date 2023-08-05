@@ -15,11 +15,12 @@ import ua.lann.protankiserver.enums.BattleSuspictionLevel;
 import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.lobbychat.LobbyChat;
 import ua.lann.protankiserver.battles.map.MapManager;
-import ua.lann.protankiserver.models.BattleSettings;
-import ua.lann.protankiserver.models.PlayerProfile;
-import ua.lann.protankiserver.models.ProBattleSettings;
+import ua.lann.protankiserver.models.battle.BattleSettings;
+import ua.lann.protankiserver.models.profile.PlayerProfile;
+import ua.lann.protankiserver.models.battle.ProBattleSettings;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 
 public class Server {
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
@@ -27,10 +28,13 @@ public class Server {
     @Getter private static Server instance;
     @Getter private LobbyChat lobbyChat;
 
+    private HashMap<String, ClientController> controllers;
+
     public static final int PORT = 1338;
 
     public void run() {
         instance = this;
+        controllers = new HashMap<>();
 
         logger.info("Loading maps...");
         MapManager.loadMaps();
@@ -80,6 +84,14 @@ public class Server {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    public void addActiveController(ClientController controller) {
+        this.controllers.put(controller.getProfile().getNickname(), controller);
+    }
+
+    public ClientController tryGetOnlinePlayerController(String nickname) {
+        return this.controllers.get(nickname);
     }
 
     public PlayerProfile tryGetOnlinePlayerProfile(String nickname) {

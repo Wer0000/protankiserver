@@ -1,4 +1,4 @@
-package ua.lann.protankiserver.models;
+package ua.lann.protankiserver.models.profile;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -7,7 +7,6 @@ import lombok.Setter;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
-import ua.lann.protankiserver.models.PremiumInfo;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;

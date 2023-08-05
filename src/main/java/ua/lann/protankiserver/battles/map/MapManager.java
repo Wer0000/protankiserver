@@ -8,7 +8,7 @@ import io.netty.buffer.Unpooled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.ClientController;
-import ua.lann.protankiserver.models.BattleLimit;
+import ua.lann.protankiserver.models.battle.BattleLimit;
 import ua.lann.protankiserver.battles.BattlesManager;
 import ua.lann.protankiserver.enums.BattleMode;
 import ua.lann.protankiserver.enums.MapTheme;

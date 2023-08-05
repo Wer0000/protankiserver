@@ -30,8 +30,7 @@ public enum Rank {
     Marshal(1000000, 1122000),
     Fieldmarshal(1122000, 1255000),
     Commander(1255000, 1400000),
-    Generalissimo(1400000, 1600000),
-    Legend(1600000, 0);
+    Generalissimo(1400000, 0);
 
     public final int minExperience;
     public final int maxExperience;
@@ -41,17 +40,12 @@ public enum Rank {
         this.maxExperience = b;
     }
 
-    public int getLegendNumber(int experience) {
-        if(experience < Rank.Legend.minExperience) return 0;
-        return experience / 200000 + 1;
-    }
-
     public int getNumber() {
         return ordinal() + 1;
     }
 
     public Rank nextRank() {
         int ordinal = getNumber() + 1;
-        return ordinal > 32 ? Rank.Legend : Rank.values()[ordinal];
+        return ordinal > 31 ? Rank.Generalissimo : Rank.values()[ordinal];
     }
 }

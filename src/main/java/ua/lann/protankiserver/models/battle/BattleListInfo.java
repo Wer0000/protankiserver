@@ -1,4 +1,4 @@
-package ua.lann.protankiserver.models;
+package ua.lann.protankiserver.models.battle;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;

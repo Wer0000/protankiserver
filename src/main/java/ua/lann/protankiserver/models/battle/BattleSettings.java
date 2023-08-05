@@ -1,4 +1,4 @@
-package ua.lann.protankiserver.models;
+package ua.lann.protankiserver.models.battle;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
