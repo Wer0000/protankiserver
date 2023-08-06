@@ -39,7 +39,7 @@ public enum PacketId {
     ConfirmLayoutAccessible(1118835050),
     SetLayout(-593368100),
 
-    ToggleShowDamage(-731115522), // Actually idk what that does
+    ToggleShowDamage(-731115522), // Determines if server needs to send damage splashes to client (Setting)
     ConfigureLobbyChat(178154988),
     SetLobbyChatDelay(744948472),
     LoadMessagesHistory(-1263520410),

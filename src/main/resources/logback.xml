@@ -1,8 +1,10 @@
 <configuration>
+    <conversionRule conversionWord="levelHighlight" converterClass="ua.lann.protankiserver.LogbackCustomHighlighting" />
+
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%d{HH:mm:ss.SSS}] [%t] [%logger{36}] [%level] %msg%n</pattern>
+            <pattern>%blue([%d{HH:mm:ss.SSS}]) %magenta([%t]) %yellow([%logger/%levelHighlight(%level)]) %msg%n</pattern>
         </encoder>
     </appender>
 
