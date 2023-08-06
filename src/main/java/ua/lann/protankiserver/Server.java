@@ -1,10 +1,13 @@
 package ua.lann.protankiserver;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.battles.BattleBase;
@@ -16,8 +19,14 @@ import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.lobbychat.LobbyChat;
 import ua.lann.protankiserver.battles.map.MapManager;
 import ua.lann.protankiserver.models.battle.BattleSettings;
-import ua.lann.protankiserver.models.profile.PlayerProfile;
+import ua.lann.protankiserver.models.profile.PlayerProfileManager;
 import ua.lann.protankiserver.models.battle.ProBattleSettings;
+import ua.lann.protankiserver.orm.HibernateUtils;
+import ua.lann.protankiserver.orm.entities.Player;
+import ua.lann.protankiserver.protocol.packets.CodecRegistry;
+import ua.lann.protankiserver.protocol.packets.PacketHandlersRegistry;
+import ua.lann.protankiserver.protocol.packets.PacketId;
+import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -35,6 +44,9 @@ public class Server {
     public void run() {
         instance = this;
         controllers = new HashMap<>();
+
+        CodecRegistry.load();
+        PacketHandlersRegistry.load();
 
         logger.info("Loading maps...");
         MapManager.loadMaps();
@@ -86,16 +98,33 @@ public class Server {
         }
     }
 
+    public void removeActiveController(ClientController controller) {
+        this.controllers.remove(controller.getPlayer().getNickname());
+        this.controllers.values().forEach(x -> {
+            ByteBuf buf = Unpooled.buffer();
+
+            CodecRegistry.getCodec(Boolean.class).encode(buf, false);
+            CodecRegistry.getCodec(String.class).encode(buf, controller.getPlayer().getNickname());
+
+            x.sendPacket(PacketId.SetUserOnlineInfo, buf);
+            buf.release();
+        });
+    }
+
     public void addActiveController(ClientController controller) {
-        this.controllers.put(controller.getProfile().getNickname(), controller);
+        this.controllers.put(controller.getPlayer().getNickname(), controller);
+    }
+
+    public Player getPlayer(String nickname) {
+        ClientController ctl = tryGetOnlinePlayerController(nickname);
+        if(ctl != null) return ctl.getPlayer();
+
+        try(Session session = HibernateUtils.session()) {
+            return session.get(Player.class, nickname);
+        }
     }
 
     public ClientController tryGetOnlinePlayerController(String nickname) {
         return this.controllers.get(nickname);
-    }
-
-    public PlayerProfile tryGetOnlinePlayerProfile(String nickname) {
-        // TODO: Retrieve player profile or null if player is offline
-        return null;
     }
 }

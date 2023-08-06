@@ -14,29 +14,12 @@ import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 
 @Getter
 @Setter
-public class PlayerProfile {
+public class PlayerProfileManager {
     private final ClientController controller;
-
-    private String nickname;
-    private ChatModeratorLevel chatModeratorLevel;
-
-    private Rank rank;
-    private int experience;
-    private int crystals;
-
     private PremiumInfo premiumInfo;
 
-
-    public PlayerProfile(Player player, ClientController controller) {
+    public PlayerProfileManager(ClientController controller) {
         this.controller = controller;
-
-        this.nickname = player.getNickname();
-
-        this.rank = player.getRank();
-        this.experience = player.getExperience();
-        this.crystals = player.getCrystals();
-        this.chatModeratorLevel = player.getLevel();
-
         this.premiumInfo = new PremiumInfo(
                 false,
                 false,
@@ -69,19 +52,20 @@ public class PlayerProfile {
         ICodec<Boolean> booleanICodec = CodecRegistry.getCodec(Boolean.class);
         ICodec<String> stringICodec = CodecRegistry.getCodec(String.class);
 
-        buf.writeInt(crystals);
-        buf.writeInt(rank.minExperience);
+        Player player = controller.getPlayer();
+        buf.writeInt(player.getCrystals());
+        buf.writeInt(player.getRank().minExperience);
         buf.writeInt(86400000); // Duration crystal abonement
         booleanICodec.encode(buf, true); // has double crystal
-        buf.writeInt(rank.maxExperience);
+        buf.writeInt(player.getRank().maxExperience);
         buf.writeInt(1); // place
-        buf.writeByte(rank.getNumber()); // why +1 lol
+        buf.writeByte(player.getRank().getNumber()); // why +1 lol
         buf.writeInt(1); // rating
-        buf.writeInt(experience);
+        buf.writeInt(player.getExperience());
         buf.writeInt(1); // Server ID
 
-        stringICodec.encode(buf, nickname);
-        stringICodec.encode(buf, "http://ratings.generaltanks.com/pt_br/user/" + nickname);
+        stringICodec.encode(buf, player.getNickname());
+        stringICodec.encode(buf, "http://ratings.generaltanks.com/en/user/" + player.getNickname());
 
         controller.sendPacket(PacketId.SetProfileInfo, buf);
         buf.release();

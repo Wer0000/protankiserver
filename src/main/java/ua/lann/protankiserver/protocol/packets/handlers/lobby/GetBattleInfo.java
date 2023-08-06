@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
+import ua.lann.protankiserver.reflection.annotations.PacketHandler;
 import ua.lann.protankiserver.battles.BattleBase;
 import ua.lann.protankiserver.battles.BattlesManager;
 import ua.lann.protankiserver.models.battle.BattleDisplayInfo;
@@ -13,6 +14,7 @@ import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 import ua.lann.protankiserver.util.JsonUtils;
 
+@PacketHandler(packetId = PacketId.GetBattleInfo)
 public class GetBattleInfo implements IHandler {
     @Override
     public void handle(ClientController channel, ByteBuf buf) {

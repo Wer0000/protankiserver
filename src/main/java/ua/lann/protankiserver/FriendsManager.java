@@ -31,7 +31,7 @@ public final class FriendsManager {
         try (Session session = HibernateUtils.session()) {
             ByteBuf buf = Unpooled.buffer();
 
-            Player player = session.get(Player.class, controller.getProfile().getNickname());
+            Player player = session.get(Player.class, controller.getPlayer().getNickname());
 
             for (Player friend : player.getFriends()) {
                 model.getFriendsAccepted().add(friend.getNickname());
@@ -67,7 +67,7 @@ public final class FriendsManager {
 
     public boolean sendFriendRequest(String targetNickname) {
         try (Session session = HibernateUtils.session()) {
-            Player senderPlayer = session.get(Player.class, controller.getProfile().getNickname());
+            Player senderPlayer = session.get(Player.class, controller.getPlayer().getNickname());
             Player targetPlayer = session.get(Player.class, targetNickname);
 
             if (targetPlayer == null) return false;
@@ -96,12 +96,12 @@ public final class FriendsManager {
             FriendsManager targetFriendsManager = targetController.getFriendsManager();
 
             ByteBuf buf = Unpooled.buffer();
-            CodecRegistry.getCodec(String.class).encode(buf, controller.getProfile().getNickname());
+            CodecRegistry.getCodec(String.class).encode(buf, controller.getPlayer().getNickname());
             targetController.sendPacket(PacketId.IncomingFriendRequest, buf);
             buf.release();
 
-            targetFriendsManager.getModel().getFriendsIncoming().add(controller.getProfile().getNickname());
-            targetFriendsManager.getModel().getFriendsIncomingNew().add(controller.getProfile().getNickname());
+            targetFriendsManager.getModel().getFriendsIncoming().add(controller.getPlayer().getNickname());
+            targetFriendsManager.getModel().getFriendsIncomingNew().add(controller.getPlayer().getNickname());
             targetFriendsManager.updateFriendsList();
             return true;
         }
@@ -123,7 +123,7 @@ public final class FriendsManager {
         return true;
     }
 
-    public static boolean acceptFriendRequest(Session session, FriendRequest request) {
+    public static void acceptFriendRequest(Session session, FriendRequest request) {
         Player sender = request.getSender();
         Player target = request.getReceiver();
 
@@ -146,17 +146,17 @@ public final class FriendsManager {
         if(targetController != null) targetController.sendPacket(PacketId.FriendRequestAccepted, buf);
         buf.release();
 
-        return processRequest(session, request, sender, target);
+        processRequest(session, request, sender, target);
     }
 
-    public static boolean rejectFriendRequest(Session session, FriendRequest request) {
+    public static void rejectFriendRequest(Session session, FriendRequest request) {
         Player sender = request.getSender();
         Player target = request.getReceiver();
 
         sender.getOutgoingFriendRequests().remove(request);
         target.getIncomingFriendRequests().remove(request);
 
-        return processRequest(session, request, sender, target);
+        processRequest(session, request, sender, target);
     }
 
     public ClientController controller() {

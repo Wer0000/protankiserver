@@ -1,11 +1,13 @@
 package ua.lann.protankiserver.protocol.packets.codec;
 
 import io.netty.buffer.ByteBuf;
+import ua.lann.protankiserver.reflection.annotations.Codec;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 
 import java.nio.charset.StandardCharsets;
 
-public class UTFStringCodec implements ICodec<String> {
+@Codec(type = String.class)
+public class StringCodec implements ICodec<String> {
     @Override
     public void encode(ByteBuf buf, String data) {
         ICodec<Boolean> codec = CodecRegistry.getCodec(Boolean.class);

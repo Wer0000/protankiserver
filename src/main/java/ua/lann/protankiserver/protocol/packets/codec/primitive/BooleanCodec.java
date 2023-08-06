@@ -1,8 +1,10 @@
 package ua.lann.protankiserver.protocol.packets.codec.primitive;
 
 import io.netty.buffer.ByteBuf;
+import ua.lann.protankiserver.reflection.annotations.Codec;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 
+@Codec(type = Boolean.class)
 public class BooleanCodec implements ICodec<Boolean> {
     @Override
     public void encode(ByteBuf buf, Boolean data) {

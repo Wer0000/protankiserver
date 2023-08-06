@@ -5,13 +5,16 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.ClientController;
+import ua.lann.protankiserver.reflection.annotations.PacketHandler;
 import ua.lann.protankiserver.orm.HibernateUtils;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
+import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 import ua.lann.protankiserver.screens.auth.AuthorizationScreen;
 
+@PacketHandler(packetId = PacketId.Register)
 public class Register implements IHandler {
     private static final Logger logger = LoggerFactory.getLogger(Register.class);
 

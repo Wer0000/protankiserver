@@ -3,9 +3,10 @@ package ua.lann.protankiserver.lobbychat;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
-import ua.lann.protankiserver.models.profile.PlayerProfile;
+import ua.lann.protankiserver.models.profile.PlayerProfileManager;
 import ua.lann.protankiserver.Server;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
+import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.protocol.packets.PacketId;
 import ua.lann.protankiserver.protocol.packets.codec.ICodec;
@@ -38,18 +39,18 @@ public class LobbyChat {
         ICodec<String> stringICodec = CodecRegistry.getCodec(String.class);
         ICodec<Boolean> booleanICodec = CodecRegistry.getCodec(Boolean.class);
 
-        booleanICodec.encode(buf, controller.getProfile().getChatModeratorLevel().equals(ChatModeratorLevel.Administrator));
+        booleanICodec.encode(buf, controller.getPlayer().getChatModeratorLevel().equals(ChatModeratorLevel.Administrator));
         booleanICodec.encode(buf, LobbyChatConfiguration.Antiflood.Enabled);
         buf.writeInt(60);
         booleanICodec.encode(buf, LobbyChatConfiguration.Enabled);
-        buf.writeInt(controller.getProfile().getChatModeratorLevel().getId());
+        buf.writeInt(controller.getPlayer().getChatModeratorLevel().getId());
 
         buf.writeByte(1); // dont ask
 
         buf.writeInt(3); // min chars
         buf.writeInt(1); // min words
 
-        stringICodec.encode(buf, controller.getProfile().getNickname());
+        stringICodec.encode(buf, controller.getPlayer().getNickname());
 
         booleanICodec.encode(buf, LobbyChatConfiguration.ShowLinks);
         booleanICodec.encode(buf, LobbyChatConfiguration.Antiflood.TypingSpeedAntifloodEnabled);
@@ -78,25 +79,25 @@ public class LobbyChat {
         buf.writeInt(messages.size());
 
         for(ChatMessage message : messages) {
-            PlayerProfile senderProfile = message.getSender().getProfile();
+            Player sender = message.getSender().getPlayer();
             String target = message.getTarget();
 
             buf.writeByte(0);
-            buf.writeInt(senderProfile.getChatModeratorLevel().getId());
+            buf.writeInt(sender.getChatModeratorLevel().getId());
             stringICodec.encode(buf, "127.0.0.1");
-            buf.writeInt(senderProfile.getRank().getNumber());
-            stringICodec.encode(buf, senderProfile.getNickname());
+            buf.writeInt(sender.getRank().getNumber());
+            stringICodec.encode(buf, sender.getNickname());
 
             booleanICodec.encode(buf, message.getType().equals(ChatMessageType.System));
 
-            PlayerProfile targetProfile = server.tryGetOnlinePlayerProfile(target);
-            if(targetProfile == null) buf.writeByte(1);
+            Player targetPlayer = server.getPlayer(target);
+            if(targetPlayer == null) buf.writeByte(1);
             else {
                 buf.writeByte(0);
-                buf.writeInt(targetProfile.getChatModeratorLevel().getId());
+                buf.writeInt(targetPlayer.getChatModeratorLevel().getId());
                 stringICodec.encode(buf, "127.0.0.1");
-                buf.writeInt(targetProfile.getRank().getNumber());
-                stringICodec.encode(buf, targetProfile.getNickname());
+                buf.writeInt(targetPlayer.getRank().getNumber());
+                stringICodec.encode(buf, targetPlayer.getNickname());
             }
 
             stringICodec.encode(buf, message.getMessage());

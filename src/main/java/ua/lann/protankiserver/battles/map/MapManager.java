@@ -43,7 +43,7 @@ public class MapManager {
         for(BattleLimit limit : BattlesManager.getLimits()) battleLimits.add(JsonUtils.toJsonObject(limit));
 
         object.addProperty("maxRangleLength", 10);
-        object.addProperty("battleCreationDisabled", controller.getProfile().getRank().getNumber() == 1);
+        object.addProperty("battleCreationDisabled", controller.getPlayer().getRank().getNumber() == 1);
         object.add("battleLimits", battleLimits);
         object.add("maps", mapsArray);
 

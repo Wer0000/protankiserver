@@ -2,9 +2,8 @@ package ua.lann.protankiserver.protocol.packets.handlers.lobby.friends;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import org.hibernate.Session;
 import ua.lann.protankiserver.ClientController;
-import ua.lann.protankiserver.orm.HibernateUtils;
+import ua.lann.protankiserver.reflection.annotations.PacketHandler;
 import ua.lann.protankiserver.orm.entities.FriendRequest;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.protocol.packets.CodecRegistry;
@@ -13,8 +12,8 @@ import ua.lann.protankiserver.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.protocol.packets.handlers.IHandler;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@PacketHandler(packetId = PacketId.SendFriendRequest)
 public class SendFriendRequest implements IHandler {
     @Override
     public void handle(ClientController channel, ByteBuf buf) {
@@ -22,8 +21,8 @@ public class SendFriendRequest implements IHandler {
         String nickname = stringICodec.decode(buf);
 
         ByteBuf buffer = Unpooled.buffer();
-        try(Session session = HibernateUtils.session()) {
-            Player player = session.get(Player.class, channel.getProfile().getNickname());
+        try {
+            Player player = channel.getPlayer();
             if(player.getFriends().stream().anyMatch(x -> x.getNickname() == null)) {
                 stringICodec.encode(buffer, nickname);
                 channel.sendPacket(PacketId.AlreadyFriends, buffer);

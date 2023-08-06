@@ -90,9 +90,9 @@ public class AuthorizationScreen extends ScreenBase {
         close();
 
         controller.setPlayer(player);
-        controller.getProfile().sendPremiumInfo();
-        controller.getProfile().sendProfileInfo();
-        controller.getProfile().sendEmailInfo();
+        controller.getProfileManager().sendPremiumInfo();
+        controller.getProfileManager().sendProfileInfo();
+        controller.getProfileManager().sendEmailInfo();
         controller.getResourcesManager().loadSingle(115361);
 
         controller.getResourcesManager().load(new Integer[] {}, () -> {
