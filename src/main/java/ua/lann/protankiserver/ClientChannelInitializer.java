@@ -8,9 +8,9 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.lann.protankiserver.protocol.packets.PacketId;
-import ua.lann.protankiserver.protocol.packets.pipeline.PacketHandler;
-import ua.lann.protankiserver.protocol.packets.pipeline.PacketProcessor;
+import ua.lann.protankiserver.game.protocol.packets.PacketId;
+import ua.lann.protankiserver.game.protocol.packets.pipeline.PacketHandlerAdapter;
+import ua.lann.protankiserver.game.protocol.packets.pipeline.PacketProcessor;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +24,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
         logger.info("Connection from {}", channel.remoteAddress().getAddress().getHostAddress());
 
         channel.pipeline().addLast(new PacketProcessor(controller.getEncryption()));
-        channel.pipeline().addLast(new PacketHandler(controller, controller.getEncryption()));
+        channel.pipeline().addLast(new PacketHandlerAdapter(controller, controller.getEncryption()));
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 30, TimeUnit.SECONDS));
 
         controller.sendPacketUnencrypted(PacketId.InitializeCrypto, controller.getEncryption().encryptionPacket());

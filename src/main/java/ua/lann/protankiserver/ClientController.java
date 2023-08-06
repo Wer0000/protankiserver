@@ -9,19 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.enums.Achievement;
 import ua.lann.protankiserver.enums.Layout;
+import ua.lann.protankiserver.game.FriendsManager;
 import ua.lann.protankiserver.models.ClientLayout;
-import ua.lann.protankiserver.localization.Locale;
+import ua.lann.protankiserver.game.localization.Locale;
 import ua.lann.protankiserver.models.profile.PlayerProfileManager;
 import ua.lann.protankiserver.orm.HibernateUtils;
 import ua.lann.protankiserver.orm.entities.Player;
-import ua.lann.protankiserver.protocol.Encryption;
-import ua.lann.protankiserver.protocol.packets.CodecRegistry;
-import ua.lann.protankiserver.protocol.packets.PacketId;
-import ua.lann.protankiserver.protocol.packets.codec.ICodec;
-import ua.lann.protankiserver.resources.ResourcesManager;
-import ua.lann.protankiserver.screens.ScreenManager;
-
-import java.util.HashMap;
+import ua.lann.protankiserver.game.protocol.Encryption;
+import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
+import ua.lann.protankiserver.game.protocol.packets.PacketId;
+import ua.lann.protankiserver.game.protocol.packets.codec.ICodec;
+import ua.lann.protankiserver.game.resources.ResourcesManager;
+import ua.lann.protankiserver.game.screens.ScreenManager;
 
 public class ClientController {
     private final Logger logger = LoggerFactory.getLogger(ClientController.class);

@@ -5,12 +5,10 @@ import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.Setter;
 import ua.lann.protankiserver.ClientController;
-import ua.lann.protankiserver.enums.ChatModeratorLevel;
-import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.orm.entities.Player;
-import ua.lann.protankiserver.protocol.packets.CodecRegistry;
-import ua.lann.protankiserver.protocol.packets.PacketId;
-import ua.lann.protankiserver.protocol.packets.codec.ICodec;
+import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
+import ua.lann.protankiserver.game.protocol.packets.PacketId;
+import ua.lann.protankiserver.game.protocol.packets.codec.ICodec;
 
 @Getter
 @Setter
