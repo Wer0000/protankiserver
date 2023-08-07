@@ -22,7 +22,7 @@ public class RequestUserInfo implements IHandler {
         String nickname = stringICodec.decode(buf);
 
         ClientController targetPlayerController = Server.getInstance().tryGetOnlinePlayerController(nickname);
-        Player targetPlayer = null;
+        Player targetPlayer;
 
         if(targetPlayerController == null) {
             try(Session session = HibernateUtils.session()) {

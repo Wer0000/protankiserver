@@ -36,7 +36,7 @@ public class DeathMatchBattle extends BattleBase {
                 proBattleSettings.isPrivate(),
                 isProBattle,
                 proBattleSettings.getFormat().equals(BattleFormat.Parkour),
-                players.stream().map(x -> x.getController().getPlayer().getNickname()).toList(), null, null,
+                players.stream().map(x -> x.controller().getPlayer().getNickname()).toList(), null, null,
                 suspictionLevel
         );
     }
@@ -65,7 +65,7 @@ public class DeathMatchBattle extends BattleBase {
                 proBattleSettings.isSupplyDropDisabled(),
                 proBattleSettings.isSuppliesDisabled(),
                 proBattleSettings.isCrystalDropDisabled(),
-                players.stream().map(x -> x.getController().getPlayer().getNickname()).toList(),
+                players.stream().map(x -> x.controller().getPlayer().getNickname()).toList(),
                 null, null, 0, 0,
                 false, false,
                 false, false, 250

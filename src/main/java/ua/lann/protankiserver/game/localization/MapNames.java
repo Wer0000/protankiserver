@@ -6,15 +6,13 @@ import ua.lann.protankiserver.util.JsonUtils;
 import java.util.HashMap;
 
 public class MapNames {
-    private static final HashMap<String, String> mappingRu;
-    private static final HashMap<String, String> mappingEn;
+    private static final HashMap<String, String> mappingRu = new HashMap<>();
+    private static final HashMap<String, String> mappingEn = new HashMap<>();
 
-    static {
-        mappingRu = new HashMap<>();
-        mappingEn = new HashMap<>();
-
-        load(mappingRu, "localization/mapNames_ru.json");
-        load(mappingEn, "localization/mapNames_en.json");
+    public static void load() {
+        // TODO: one day i'll make this same as GarageItemsLocalization
+        load(mappingRu, "localization/ru/mapNames.json");
+        load(mappingEn, "localization/en/mapNames.json");
     }
 
     public static String getName(String mapId, Locale locale) {

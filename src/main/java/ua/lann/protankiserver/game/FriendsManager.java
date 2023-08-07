@@ -22,7 +22,7 @@ public final class FriendsManager {
     @Getter
     private final ClientController controller;
 
-    @Getter private FriendsListModel model;
+    @Getter private final FriendsListModel model;
 
     public FriendsManager(ClientController controller) {
         this.controller = controller;
@@ -113,7 +113,7 @@ public final class FriendsManager {
         // TODO
     }
 
-    private static boolean processRequest(Session session, FriendRequest request, Player sender, Player target) {
+    private static void processRequest(Session session, FriendRequest request, Player sender, Player target) {
         session.getTransaction().begin();
         session.merge(sender);
         session.merge(target);
@@ -122,7 +122,6 @@ public final class FriendsManager {
         session.getTransaction().begin();
         session.remove(request);
         session.getTransaction().commit();
-        return true;
     }
 
     public static void acceptFriendRequest(Session session, FriendRequest request) {

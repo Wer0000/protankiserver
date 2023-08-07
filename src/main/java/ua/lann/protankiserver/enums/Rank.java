@@ -44,6 +44,16 @@ public enum Rank {
         return ordinal() + 1;
     }
 
+    public static Rank getRankByExp(int experience) {
+        for (Rank rank : Rank.values()) {
+            if (experience >= rank.minExperience && experience < rank.maxExperience) {
+                return rank;
+            }
+        }
+
+        return Rank.Generalissimo;
+    }
+
     public Rank nextRank() {
         int ordinal = getNumber() + 1;
         return ordinal > 31 ? Rank.Generalissimo : Rank.values()[ordinal];

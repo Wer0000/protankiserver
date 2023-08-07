@@ -5,5 +5,5 @@ public enum BattleFormat {
     XP,
     BP,
     XPBP,
-    Parkour;
+    Parkour
 }

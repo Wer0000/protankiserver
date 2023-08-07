@@ -3,11 +3,11 @@ package ua.lann.protankiserver.game.resources;
 import com.google.gson.JsonObject;
 
 public class ResourceInfo {
-    int idhigh = 0;
-    int idlow = 0;
-    int versionhigh = 0;
-    int versionlow = 0;
-    int type = 0;
+    int idhigh;
+    int idlow;
+    int versionhigh;
+    int versionlow;
+    int type;
     boolean lazy = false;
     boolean alpha = false;
 

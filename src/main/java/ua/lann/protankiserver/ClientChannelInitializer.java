@@ -19,11 +19,11 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
     private ClientController controller;
 
     @Override
-    protected void initChannel(SocketChannel channel) throws Exception {
+    protected void initChannel(SocketChannel channel) {
         controller = new ClientController(channel);
         logger.info("Connection from {}", channel.remoteAddress().getAddress().getHostAddress());
 
-        channel.pipeline().addLast(new PacketProcessor(controller.getEncryption()));
+        channel.pipeline().addLast(new PacketProcessor());
         channel.pipeline().addLast(new PacketHandlerAdapter(controller, controller.getEncryption()));
         channel.pipeline().addLast(new IdleStateHandler(0, 0, 30, TimeUnit.SECONDS));
 
@@ -36,7 +36,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         logger.info("Channel is inactive!");
         controller.Dispose();
     }

@@ -63,7 +63,7 @@ public class PlayerProfileManager {
         buf.writeInt(1); // Server ID
 
         stringICodec.encode(buf, player.getNickname());
-        stringICodec.encode(buf, "http://ratings.generaltanks.com/en/user/" + player.getNickname());
+        stringICodec.encode(buf, "https://ratings.generaltanks.com/en/user/" + player.getNickname());
 
         controller.sendPacket(PacketId.SetProfileInfo, buf);
         buf.release();

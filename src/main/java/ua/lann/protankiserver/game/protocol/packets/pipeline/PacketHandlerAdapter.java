@@ -23,7 +23,7 @@ public class PacketHandlerAdapter extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf buffer = (ByteBuf) msg;
         buffer.retain();
 

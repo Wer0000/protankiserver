@@ -23,7 +23,6 @@ import ua.lann.protankiserver.models.battle.ProBattleSettings;
 import ua.lann.protankiserver.orm.HibernateUtils;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
-import ua.lann.protankiserver.game.protocol.packets.PacketHandlersRegistry;
 import ua.lann.protankiserver.game.protocol.packets.PacketId;
 
 import java.net.InetSocketAddress;
@@ -42,12 +41,6 @@ public class Server {
     public void run() {
         instance = this;
         controllers = new HashMap<>();
-
-        CodecRegistry.load();
-        PacketHandlersRegistry.load();
-
-        logger.info("Loading maps...");
-        MapManager.loadMaps();
 
         BattleBase battle = new DeathMatchBattle(
                 "ffffffff",

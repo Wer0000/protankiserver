@@ -38,6 +38,7 @@ public class ResourcesManager {
 
         resources = new HashMap<>();
         resources.put(ResourcesPack.Main, loadResources("main.json"));
+        resources.put(ResourcesPack.Garage, loadResources("garage.json"));
     }
 
     public static ResourceInfo getResource(Integer idlow) {

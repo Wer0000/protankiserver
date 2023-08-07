@@ -6,7 +6,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.lann.protankiserver.game.protocol.Encryption;
 import ua.lann.protankiserver.game.protocol.packets.PacketProcessorState;
 
 import java.util.List;
@@ -14,15 +13,12 @@ import java.util.List;
 public class PacketProcessor extends ByteToMessageDecoder {
     private final Logger logger = LoggerFactory.getLogger(PacketProcessor.class);
 
-    private final Encryption encryption;
-    public PacketProcessor(Encryption encryption) { this.encryption = encryption; };
-
     private PacketProcessorState state = PacketProcessorState.Waiting;
     private final ByteBuf buffer = Unpooled.buffer();
     private int packetLength;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) {
         buffer.writeBytes(buf);
 
         if(state == PacketProcessorState.Waiting) {

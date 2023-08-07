@@ -79,7 +79,12 @@ public enum PacketId {
     RejectFriendRequest(-1588006900),
     FriendRequestAccepted(-139645601),
 
-    OpenGarage(-479046431);
+    OpenGarage(-479046431),
+    OpenGarageResponse(-324155151),
+
+    InitGarageOwnedItems(-255516505),
+    InitGarageBuyableItems(-300370823),
+    SetGarageItemEquipped(2062201643);
 
     public final int packetId;
 

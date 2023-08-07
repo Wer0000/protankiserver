@@ -27,7 +27,7 @@ public class Register implements IHandler {
         String password = stringICodec.decode(buf);
         boolean remember = booleanICodec.decode(buf);
 
-        Player player = null;
+        Player player;
         try(Session session = HibernateUtils.session()) {
             player = session.get(Player.class, nickname);
             if (player != null) {

@@ -34,7 +34,7 @@ public class ClientController {
     @Getter private final FriendsManager friendsManager;
 
     @Getter private Player player;
-    @Getter private PlayerProfileManager profileManager;
+    @Getter private final PlayerProfileManager profileManager;
 
     @Getter private final ScreenManager screenManager;
 
