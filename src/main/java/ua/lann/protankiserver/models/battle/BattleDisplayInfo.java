@@ -1,6 +1,6 @@
 package ua.lann.protankiserver.models.battle;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,32 +14,32 @@ import java.util.List;
 @AllArgsConstructor
 public class BattleDisplayInfo {
     private String name;
-    @SerializedName("itemId") private String id;
-    @SerializedName("map") private String mapId;
-    @SerializedName("preview") private int previewResourceId;
+    @Json(name = "itemId") private String id;
+    @Json(name = "map") private String mapId;
+    @Json(name = "preview") private int previewResourceId;
 
-    @SerializedName("battleMode") private BattleMode mode;
+    @Json(name = "battleMode") private BattleMode mode;
 
-    @SerializedName("maxPeopleCount") private int maxPeople;
+    @Json(name = "maxPeopleCount") private int maxPeople;
     private int scoreLimit;
     private int minRank;
     private int maxRank;
 
-    @SerializedName("timeLimitInSec") private int timeLimitInSeconds;
-    @SerializedName("proBattleTimeLimitInSec") private int proBattleTimeLimitInSeconds;
+    @Json(name = "timeLimitInSec") private int timeLimitInSeconds;
+    @Json(name = "proBattleTimeLimitInSec") private int proBattleTimeLimitInSeconds;
 
     private boolean equipmentConstraintsMode; // XP / BP / XPBP (See BattleFormat enum)
-    @SerializedName("privateBattle") private boolean isPrivate;
-    @SerializedName("proBattle") private boolean isProBattle;
-    @SerializedName("parkourMode") private boolean isParkourMode;
+    @Json(name = "privateBattle") private boolean isPrivate;
+    @Json(name = "proBattle") private boolean isProBattle;
+    @Json(name = "parkourMode") private boolean isParkourMode;
 
-    @SerializedName("suspicionLevel") private BattleSuspictionLevel suspictionLevel;
+    @Json(name = "suspicionLevel") private BattleSuspictionLevel suspictionLevel;
 
-    @SerializedName("reArmorEnabled") private boolean isRearmoringEnabled;
-    @SerializedName("roundStarted") private boolean isRoundStarted;
-    @SerializedName("withoutBonuses") private boolean isWithoutBonuses;
-    @SerializedName("withoutSupplies") private boolean isWithoutSupplies;
-    @SerializedName("withoutCrystals") private boolean isWithoutCrystals;
+    @Json(name = "reArmorEnabled") private boolean isRearmoringEnabled;
+    @Json(name = "roundStarted") private boolean isRoundStarted;
+    @Json(name = "withoutBonuses") private boolean isWithoutBonuses;
+    @Json(name = "withoutSupplies") private boolean isWithoutSupplies;
+    @Json(name = "withoutCrystals") private boolean isWithoutCrystals;
 
     // For DM battle
     private List<String> users;
@@ -51,11 +51,11 @@ public class BattleDisplayInfo {
     private int scoreBlue;
     private int scoreRed;
 
-    @SerializedName("friendlyFire") private boolean isFriendlyFireEnabled;
-    @SerializedName("autoBalance") private boolean isAutobalanceEnabled;
+    @Json(name = "friendlyFire") private boolean isFriendlyFireEnabled;
+    @Json(name = "autoBalance") private boolean isAutobalanceEnabled;
 
-    @SerializedName("userPaidNoSuppliesBattle") private boolean hasProBattlePass;
-    @SerializedName("spectator") private boolean isSpectator;
+    @Json(name = "userPaidNoSuppliesBattle") private boolean hasProBattlePass;
+    @Json(name = "spectator") private boolean isSpectator;
 
     private int proBattleEnterPrice;
 }

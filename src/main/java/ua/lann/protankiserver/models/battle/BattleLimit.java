@@ -1,6 +1,6 @@
 package ua.lann.protankiserver.models.battle;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ua.lann.protankiserver.enums.BattleMode;
@@ -10,5 +10,5 @@ import ua.lann.protankiserver.enums.BattleMode;
 public class BattleLimit {
     private BattleMode mode;
     private int scoreLimit;
-    @SerializedName("timeLimitInSec") private int timeLimitInSeconds;
+    @Json(name = "timeLimitInSec") private int timeLimitInSeconds;
 }

@@ -9,6 +9,8 @@ import ua.lann.protankiserver.orm.entities.FriendRequest;
 import ua.lann.protankiserver.orm.entities.Player;
 import ua.lann.protankiserver.orm.entities.garage.BaseGarageItem;
 import ua.lann.protankiserver.orm.entities.garage.DiscountEntity;
+import ua.lann.protankiserver.orm.entities.garage.EquippedTankData;
+import ua.lann.protankiserver.orm.entities.garage.ResistancesEntity;
 import ua.lann.protankiserver.orm.entities.garage.items.EquipmentGarageItem;
 import ua.lann.protankiserver.orm.entities.garage.items.PaintGarageItem;
 
@@ -25,8 +27,10 @@ public class HibernateUtils {
         config.addAnnotatedClass(BaseGarageItem.class);
         config.addAnnotatedClass(EquipmentGarageItem.class);
         config.addAnnotatedClass(PaintGarageItem.class);
+        config.addAnnotatedClass(ResistancesEntity.class);
 
         config.addAnnotatedClass(DiscountEntity.class);
+        config.addAnnotatedClass(EquippedTankData.class);
 
         logger.info("Configured: {}@{}", config.getProperty("hibernate.connection.username"), config.getProperty("hibernate.connection.url"));
 

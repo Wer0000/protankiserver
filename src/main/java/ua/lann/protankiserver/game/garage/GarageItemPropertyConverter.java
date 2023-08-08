@@ -1,51 +1,46 @@
 package ua.lann.protankiserver.game.garage;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import ua.lann.protankiserver.models.garage.GarageItemProperty;
+import ua.lann.protankiserver.orm.models.GarageItemProperty;
+import ua.lann.protankiserver.orm.models.GarageItemRawProperty;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class GarageItemPropertyConverter {
+    public static List<GarageItemProperty> convert(Map<String, GarageItemRawProperty> props) {
+        List<GarageItemProperty> result = new ArrayList<>();
+        if(props.isEmpty()) return null;
 
-    public static List<GarageItemProperty> convertJsonObject(JsonObject jsonObject) {
-        List<GarageItemProperty> garageItemProperties = new ArrayList<>();
-        List<String> archived = new ArrayList<>();
+        List<String> removal = new ArrayList<>();
+        for(String key : props.keySet()) {
+            if(removal.contains(key)) continue;
 
-        for (String property : jsonObject.keySet()) {
-            JsonObject propertyObject = jsonObject.get(property).getAsJsonObject();
-            JsonArray subpropertiesArray = propertyObject.get("subproperties").isJsonNull() ? null : propertyObject.getAsJsonArray("subproperties");
-
-            if(archived.contains(property)) continue;
-
+            GarageItemRawProperty rawProperty = props.get(key);
             GarageItemProperty prop = new GarageItemProperty();
-            prop.setProperty(property);
 
-            if(subpropertiesArray != null) {
-                prop.setValue(null);
-                prop.setSubproperties(new ArrayList<>());
+            prop.setProperty(key);
+            prop.setValue(rawProperty.getValue());
+            if(rawProperty.getSubproperties() != null) prop.setSubproperties(
+                rawProperty.getSubproperties().stream().map(x -> {
+                    GarageItemProperty newProp = new GarageItemProperty();
 
-                for(JsonElement keyElement : subpropertiesArray) {
-                    String key = keyElement.getAsString();
-                    JsonObject propertyObjectInner = jsonObject.getAsJsonObject(key);
+                    newProp.setProperty(x);
+                    newProp.setValue(props.get(x).getValue());
+                    newProp.setSubproperties(null);
+                    removal.add(x);
 
-                    GarageItemProperty prop2 = new GarageItemProperty();
-                    prop2.setProperty(key);
-                    prop2.setValue(propertyObjectInner.get("value").getAsDouble());
-                    prop.getSubproperties().add(prop2);
+                    return newProp;
+                }).toList()
+            );
 
-                    archived.add(key);
-                }
-
-            } else {
-                prop.setValue(propertyObject.get("value").getAsDouble());
-                prop.setSubproperties(null);
-            }
-
-            garageItemProperties.add(prop);
+            result.add(prop);
         }
 
-        return garageItemProperties;
+        for (String key : removal) {
+            props.remove(key);
+        }
+
+        return result;
     }
 }

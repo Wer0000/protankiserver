@@ -3,7 +3,7 @@ package ua.lann.protankiserver.game.battles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import ua.lann.protankiserver.game.battles.map.Map;
+import ua.lann.protankiserver.game.battles.models.Map;
 import ua.lann.protankiserver.enums.BattleSuspictionLevel;
 import ua.lann.protankiserver.models.battle.BattleDisplayInfo;
 import ua.lann.protankiserver.models.battle.BattleListInfo;

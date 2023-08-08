@@ -84,7 +84,9 @@ public enum PacketId {
 
     InitGarageOwnedItems(-255516505),
     InitGarageBuyableItems(-300370823),
-    SetGarageItemEquipped(2062201643);
+    SetGarageItemEquipped(2062201643),
+    TryFit(1091756732),
+    EquipGarageItem(-1505530736);
 
     public final int packetId;
 

@@ -1,36 +1,63 @@
 package ua.lann.protankiserver.game.garage;
 
-import com.google.gson.JsonObject;
+import com.squareup.moshi.Types;
 import ua.lann.protankiserver.enums.WeaponType;
-import ua.lann.protankiserver.models.garage.data.ItemDataModel;
-import ua.lann.protankiserver.util.JsonUtils;
+import ua.lann.protankiserver.orm.models.*;
+import ua.lann.protankiserver.serialization.JsonUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ItemsDataManager {
-    private static final HashMap<WeaponType, HashMap<Integer, ItemDataModel>> weaponsData = new HashMap<>();
+    private static final HashMap<WeaponType, HashMap<Integer, GarageItemData>> weaponsData = new HashMap<>();
 
-    public static ItemDataModel getWeaponData(WeaponType weapon, int modification) {
+    public static GarageItemData getWeaponData(WeaponType weapon, int modification) {
         return weaponsData.get(weapon).get(modification);
     }
 
     public static void load() {
-        JsonObject object = JsonUtils.readJsonObject("data/weapons.json");
+        Map<String, Map<String, GarageItemRawData>> model = JsonUtils.readResource("data/weapons.json", Types.newParameterizedType(
+            Map.class,
+            String.class,
+            Types.newParameterizedType(
+                Map.class,
+                String.class,
+                GarageItemRawData.class
+            )
+        ));
 
-        for (String id : object.keySet()) {
-            HashMap<Integer, ItemDataModel> innerHashmap = new HashMap<>();
+        for (String id : model.keySet()) {
+            HashMap<Integer, GarageItemData> innerHashmap = new HashMap<>();
 
-            JsonObject inner = object.getAsJsonObject(id);
+            Map<String, GarageItemRawData> inner = model.get(id);
             for (int modification : inner.keySet().stream().map(Integer::parseInt).toList()) {
-                ItemDataModel model = new ItemDataModel();
-                JsonObject data = inner.getAsJsonObject(String.valueOf(modification));
+                GarageItemData _model = new GarageItemData();
 
-                model.setObject3ds(data.get("object3ds").getAsInt());
-                model.setBaseItemId(data.get("baseItemId").getAsInt());
-                model.setPreviewResourceId(data.get("previewResourceId").getAsInt());
-                model.setProperties(GarageItemPropertyConverter.convertJsonObject(data.getAsJsonObject("propers")));
+                GarageItemRawData rawData = inner.get(String.valueOf(modification));
 
-                innerHashmap.put(modification, model);
+                _model.setObject3ds(rawData.getObject3ds());
+                _model.setBaseItemId(rawData.getBaseItemId());
+                _model.setPreviewResourceId(rawData.getPreviewResourceId());
+                _model.setProperties(rawData.getProperties().entrySet().stream().map(x -> {
+                    GarageItemProperty prop = new GarageItemProperty();
+
+                    prop.setProperty(x.getKey());
+                    prop.setValue(x.getValue().getValue());
+                    if(x.getValue().getSubproperties() != null) prop.setSubproperties(x.getValue().getSubproperties().stream().map(y -> {
+                        GarageItemProperty innerProp = new GarageItemProperty();
+                        GarageItemRawProperty imod = rawData.getProperties().get(y);
+
+                        innerProp.setProperty(y);
+                        innerProp.setValue(imod.getValue());
+                        innerProp.setSubproperties(null);
+
+                        return innerProp;
+                    }).toList());
+
+                    return prop;
+                }).toList());
+
+                innerHashmap.put(modification, _model);
             }
 
             weaponsData.put(WeaponType.getById(id), innerHashmap);

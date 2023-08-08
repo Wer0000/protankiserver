@@ -17,7 +17,7 @@ import ua.lann.protankiserver.enums.BattleMode;
 import ua.lann.protankiserver.enums.BattleSuspictionLevel;
 import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.game.lobbychat.LobbyChat;
-import ua.lann.protankiserver.game.battles.map.MapManager;
+import ua.lann.protankiserver.game.battles.MapManager;
 import ua.lann.protankiserver.models.battle.BattleSettings;
 import ua.lann.protankiserver.models.battle.ProBattleSettings;
 import ua.lann.protankiserver.orm.HibernateUtils;

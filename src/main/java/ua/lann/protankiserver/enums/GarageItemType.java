@@ -16,4 +16,12 @@ public enum GarageItemType {
 
     private final int key;
     private final String categoryKey;
+
+    public static GarageItemType fromKey(int key) {
+        for(GarageItemType type : GarageItemType.values()) {
+            if(type.getKey() == key) return type;
+        }
+
+        return null;
+    }
 }

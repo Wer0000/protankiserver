@@ -2,7 +2,7 @@ package ua.lann.protankiserver.game.battles.impl;
 
 import ua.lann.protankiserver.game.battles.BattleBase;
 import ua.lann.protankiserver.game.battles.BattlePlayer;
-import ua.lann.protankiserver.game.battles.map.Map;
+import ua.lann.protankiserver.game.battles.models.Map;
 import ua.lann.protankiserver.enums.BattleFormat;
 import ua.lann.protankiserver.enums.BattleSuspictionLevel;
 import ua.lann.protankiserver.models.battle.BattleDisplayInfo;

@@ -1,56 +1,61 @@
 package ua.lann.protankiserver.models.garage;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 import lombok.Getter;
 import lombok.Setter;
 import ua.lann.protankiserver.enums.GarageItemType;
 import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.game.localization.GarageItemLocalizedData;
+import ua.lann.protankiserver.orm.models.GarageItemProperty;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter @Setter
 public class GarageItem implements Cloneable {
-    private String id;
-    private int index;
-    private GarageItemType type;
-    private String category;
-    @SerializedName("isInventory") private boolean isCountable = false;
+    @Json private String id;
+    @Json private int index;
+    @Json private GarageItemType type;
+    @Json private String category;
+    @Json(name = "isInventory") private boolean isCountable = false;
 
-    private boolean isForRent = false;
-    private boolean grouped = false;
+    @Json private boolean isForRent = false;
+    @Json private boolean grouped = false;
 
-    private String name;
-    private String description;
+    @Json private String name;
+    @Json private String description;
 
-    private Rank rank;
-    @SerializedName("next_rank") private Rank nextRank;
+    @Json private Rank rank;
+    @Json(name = "next_rank") private Rank nextRank;
 
     private transient GarageItemLocalizedData localizedData;
 
-    private int price;
-    @SerializedName("next_price") private int nextPrice;
-    private Discount discount;
+    @Json private int price;
+    @Json(name = "next_price") private int nextPrice;
+    @Json private Discount discount;
 
-    private int baseItemId;
-    private int previewResourceId;
+    @Json private int baseItemId;
+    @Json private int previewResourceId;
 
-    @SerializedName("remainingTimeInSec") private long remainingTimeInSeconds;
+    @Json(name = "remainingTimeInSec") private long remainingTimeInSeconds;
+    @Json private List<GarageItemProperty> properts;
 
-    @SerializedName("properts") private List<GarageItemProperty> properties;
+    private transient List<GarageItemProperty> properties;
 
     // Weapon / Hull
-    private Integer modificationID = null;
-    private Integer object3ds = null;
+    @Json private Integer modificationID = null;
+    @Json private Integer object3ds = null;
 
     // Paint
-    private Integer coloring = null;
+    @Json private Integer coloring = null;
+    private transient PaintResistances resistances = null;
 
     // Supply
-    private Integer count = null;
+    @Json private Integer count = null;
 
     // Kit
-    private GarageItemKit kit;
+//    @Json private GarageItemKit kit;
 
     @Override
     public GarageItem clone() {

@@ -9,6 +9,8 @@ import ua.lann.protankiserver.game.protocol.packets.PacketId;
 import ua.lann.protankiserver.game.protocol.packets.handlers.IHandler;
 import ua.lann.protankiserver.game.resources.ResourcesPack;
 import ua.lann.protankiserver.models.garage.InitGarageOwnedItems;
+import ua.lann.protankiserver.orm.entities.garage.EquippedTankData;
+import ua.lann.protankiserver.orm.entities.garage.items.EquipmentGarageItem;
 import ua.lann.protankiserver.reflection.annotations.PacketHandler;
 
 @PacketHandler(packetId = PacketId.OpenGarage)
@@ -20,7 +22,10 @@ public class OpenGarage implements IHandler {
             InitGarageOwnedItems owned = GarageManager.sendOwnedItems(channel);
             GarageManager.sendBuyableItems(owned.getItems(), channel);
 
-            // TODO: init equipped stuff
+            EquippedTankData equipment = channel.getPlayer().getEquipment();
+            GarageManager.setEquipped(channel, equipment.getWeapon());
+            GarageManager.setEquipped(channel, equipment.getHull());
+            GarageManager.setEquipped(channel, equipment.getPaint());
 
             channel.loadLayout(Layout.Garage, Layout.Garage);
         });

@@ -1,7 +1,6 @@
 package ua.lann.protankiserver.game.localization;
 
-import com.google.gson.JsonObject;
-import ua.lann.protankiserver.util.JsonUtils;
+import ua.lann.protankiserver.serialization.JsonUtils;
 
 import java.util.HashMap;
 
@@ -20,9 +19,9 @@ public class MapNames {
     }
 
     private static void load(HashMap<String, String> destination, String resourceName) {
-        JsonObject obj = JsonUtils.readJsonObject(resourceName);
-        for(String key : obj.keySet()) {
-            destination.put(key, obj.get(key).getAsString());
+        MapNamesModel obj = JsonUtils.readResource(resourceName, MapNamesModel.class);
+        for(String key : obj.getKeyMap().keySet()) {
+            destination.put(key, obj.getKeyMap().get(key));
         }
     }
 }

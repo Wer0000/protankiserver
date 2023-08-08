@@ -2,9 +2,10 @@ package ua.lann.protankiserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.lann.protankiserver.game.battles.map.MapManager;
+import ua.lann.protankiserver.game.battles.MapManager;
 import ua.lann.protankiserver.game.garage.GarageManager;
 import ua.lann.protankiserver.game.garage.ItemsDataManager;
+import ua.lann.protankiserver.game.localization.GarageItemsLocalization;
 import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.game.protocol.packets.PacketHandlersRegistry;
 import ua.lann.protankiserver.orm.HibernateUtils;
@@ -19,6 +20,7 @@ public class Main {
         HibernateUtils.setupSessionFactory();
 
         logger.info("Loading garage items...");
+        GarageItemsLocalization.load();
         ItemsDataManager.load();
         GarageManager.loadItems();
 

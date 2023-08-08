@@ -7,7 +7,7 @@ import ua.lann.protankiserver.enums.GarageItemType;
 import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.game.localization.GarageItemLocalizedData;
 import ua.lann.protankiserver.game.localization.GarageItemsLocalization;
-import ua.lann.protankiserver.models.garage.GarageItemProperty;
+import ua.lann.protankiserver.orm.models.GarageItemProperty;
 
 import java.util.ArrayList;
 import java.util.List;

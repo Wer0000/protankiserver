@@ -1,6 +1,5 @@
 package ua.lann.protankiserver.game.protocol.packets.handlers.lobby;
 
-import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
@@ -12,14 +11,13 @@ import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.game.protocol.packets.PacketId;
 import ua.lann.protankiserver.game.protocol.packets.codec.ICodec;
 import ua.lann.protankiserver.game.protocol.packets.handlers.IHandler;
-import ua.lann.protankiserver.util.JsonUtils;
+import ua.lann.protankiserver.serialization.JsonUtils;
 
 @PacketHandler(packetId = PacketId.GetBattleInfo)
 public class GetBattleInfo implements IHandler {
     @Override
     public void handle(ClientController channel, ByteBuf buf) {
         ICodec<String> stringICodec = CodecRegistry.getCodec(String.class);
-        ICodec<JsonObject> objectICodec = CodecRegistry.getCodec(JsonObject.class);
 
         String battleId = stringICodec.decode(buf);
 
@@ -36,7 +34,7 @@ public class GetBattleInfo implements IHandler {
 
         BattleDisplayInfo displayInfo = battle.getBattleDisplayInfo();
 
-        objectICodec.encode(buffer, JsonUtils.toJsonObject(displayInfo));
+        stringICodec.encode(buffer, JsonUtils.toString(displayInfo, BattleDisplayInfo.class));
 
         channel.sendPacket(PacketId.SendBattleInfo, buffer);
         buffer.release();

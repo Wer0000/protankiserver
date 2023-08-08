@@ -5,7 +5,7 @@ import ua.lann.protankiserver.Server;
 import ua.lann.protankiserver.game.battles.BattlesManager;
 import ua.lann.protankiserver.enums.Layout;
 import ua.lann.protankiserver.game.lobbychat.LobbyChat;
-import ua.lann.protankiserver.game.battles.map.MapManager;
+import ua.lann.protankiserver.game.battles.MapManager;
 import ua.lann.protankiserver.game.screens.ScreenBase;
 
 public class BattleSelectScreen extends ScreenBase {

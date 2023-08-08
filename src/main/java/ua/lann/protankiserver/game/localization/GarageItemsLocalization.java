@@ -1,9 +1,10 @@
 package ua.lann.protankiserver.game.localization;
 
-import com.google.gson.JsonObject;
-import ua.lann.protankiserver.util.JsonUtils;
+import com.squareup.moshi.Types;
+import ua.lann.protankiserver.serialization.JsonUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class GarageItemsLocalization {
     private static final HashMap<String, GarageItemLocalizedData> mapping = new HashMap<>();
@@ -18,14 +19,20 @@ public class GarageItemsLocalization {
     }
 
     private static void load(Locale locale, String resourceName) {
-        JsonObject obj = JsonUtils.readJsonObject(resourceName);
+        Map<String, GarageItemsLocalizationModelItem> obj = JsonUtils.readResource(resourceName, Types.newParameterizedType(
+            Map.class,
+            String.class,
+            GarageItemsLocalizationModelItem.class
+        ));
+
         for(String key : obj.keySet()) {
-            JsonObject _obj = obj.get(key).getAsJsonObject();
             GarageItemLocalizedData data = mapping.get(key);
             if(data == null) data = new GarageItemLocalizedData();
 
-            data.setName(locale, _obj.get("name").getAsString());
-            data.setDescription(locale, _obj.get("description").getAsString());
+            GarageItemsLocalizationModelItem raw = obj.get(key);
+
+            data.setName(locale, raw.getName());
+            data.setDescription(locale, raw.getDescription());
 
             mapping.put(key, data);
         }

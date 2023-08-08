@@ -3,6 +3,10 @@
     "name": "First Aid",
     "description": "Gradually restores «heath» at the rate of 30 HP/sec. Heals till full healing or till all HPs are given. The amount of HPs in the medkit is equal to full «health» of the tank. Next use within 30 seconds after previous medkit activation. A must have item at a warfield. A set of well balanced medical items, packed in a box, helps to stay alive in a very dangerous situations. The box itself can play the role of composting tollet."
   },
+  "demon": {
+    "name": "Demon",
+    "description": "The most mysterious paint in game"
+  },
   "armor": {
     "name": "Double Armor",
     "description": "Doubles protection to one minute.\n\nA set of advanced kevlar plates, mounted in standart slots. Being set in a right way they can take up 50% of kinetic and thermal energy of the impact, provided double power armor.\n\nThe devices function for the period of one minute."

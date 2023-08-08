@@ -7,12 +7,14 @@ import org.hibernate.Session;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.orm.HibernateUtils;
+import ua.lann.protankiserver.orm.entities.garage.EquippedTankData;
 import ua.lann.protankiserver.orm.entities.garage.OwnedGarageItem;
 import ua.lann.protankiserver.security.BCryptHasher;
 
 import java.util.*;
 
 @Entity
+@Getter @Setter
 public class Player {
     @Getter @Id
     private String nickname;
@@ -30,8 +32,9 @@ public class Player {
     @Enumerated(EnumType.STRING)
     @Column private ChatModeratorLevel chatModeratorLevel = ChatModeratorLevel.None;
 
-    @Getter @Setter @Column
-    private String equippedWeapon = "smoky_m0";
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "equipment_id")
+    private EquippedTankData equipment = new EquippedTankData("smoky", "hunter", "green");
 
     @Getter @Setter
     @ElementCollection(fetch = FetchType.EAGER)
@@ -39,8 +42,8 @@ public class Player {
     private List<OwnedGarageItem> ownedItems = List.of(
         new OwnedGarageItem("smoky", 0),
         new OwnedGarageItem("hunter", 0),
-        new OwnedGarageItem("green", -1),
-        new OwnedGarageItem("holiday", -1)
+        new OwnedGarageItem("green", 0),
+        new OwnedGarageItem("holiday", 0)
     );
 
     @Getter

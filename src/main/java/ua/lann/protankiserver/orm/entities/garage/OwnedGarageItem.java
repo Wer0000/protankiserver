@@ -11,6 +11,6 @@ import lombok.Setter;
 @Embeddable
 @Getter @Setter
 public class OwnedGarageItem {
-    private String id;
+    private String itemId;
     private int modification;
 }

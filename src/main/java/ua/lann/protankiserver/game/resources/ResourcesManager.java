@@ -1,7 +1,7 @@
 package ua.lann.protankiserver.game.resources;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Types;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.slf4j.Logger;
@@ -10,20 +10,25 @@ import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.game.protocol.packets.PacketId;
 import ua.lann.protankiserver.game.protocol.packets.codec.ICodec;
-import ua.lann.protankiserver.util.JsonUtils;
+import ua.lann.protankiserver.serialization.JsonUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ResourcesManager {
     private static final Logger logger = LoggerFactory.getLogger(ResourcesManager.class);
 
     private static final HashMap<Integer, ResourceInfo> staticResources = new HashMap<>();
     static {
-        JsonObject object = JsonUtils.readJsonObject("resources.json");
-        for(String idlow : object.keySet()) {
-            JsonObject res = object.getAsJsonObject(idlow);
-            staticResources.put(Integer.valueOf(idlow), new ResourceInfo(res));
+        Map<String, ResourceInfo> map = JsonUtils.readResource("resources.json", Types.newParameterizedType(
+            Map.class,
+            String.class,
+            ResourceInfo.class
+        ));
+
+        for(String idlow : map.keySet()) {
+            staticResources.put(Integer.valueOf(idlow), map.get(idlow));
         }
     }
 
@@ -46,19 +51,7 @@ public class ResourcesManager {
     }
 
     private Integer[] loadResources(String resourceName) {
-        JsonArray array = JsonUtils.readJsonArray(resourceName);
-
-        if(array == null) {
-            logger.error("Missing resource file {}", resourceName);
-            return new Integer[0];
-        }
-
-        int[] intArray = new int[array.size()];
-        for (int i = 0; i < array.size(); i++) intArray[i] = array.get(i).getAsInt();
-
-        return Arrays.stream(intArray)
-            .boxed()
-            .toArray(Integer[]::new);
+        return JsonUtils.readResource(resourceName, Integer[].class);
     }
 
     public void notifyLoaded(int callbackId) {
@@ -83,21 +76,18 @@ public class ResourcesManager {
 
     public void load(Integer[] resources, ResourceLoadedCallback callback, int callbackId) {
         ByteBuf buffer = Unpooled.buffer();
-        JsonObject object = new JsonObject();
-        JsonArray array = new JsonArray();
 
-        for(int i : resources) {
-            ResourceInfo info = getResource(i);
-            array.add(info.toJsonObject());
-        }
+        LoadResourcesModel model = new LoadResourcesModel();
+        model.resources = Arrays.stream(resources)
+            .map(ResourcesManager::getResource)
+            .toArray(ResourceInfo[]::new);
 
-        object.add("resources", array);
+        ICodec<String> stringICodec = CodecRegistry.getCodec(String.class);
+        stringICodec.encode(buffer, JsonUtils.toString(model, LoadResourcesModel.class));
 
-        ICodec<JsonObject> objectICodec = CodecRegistry.getCodec(JsonObject.class);
-        objectICodec.encode(buffer, object);
         buffer.writeInt(callbackId);
-
         this.callbacks.put(callbackId, callback);
+
         controller.sendPacket(PacketId.LoadResources, buffer);
     }
 }

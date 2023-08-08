@@ -1,17 +1,15 @@
 package ua.lann.protankiserver.game.battles;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.enums.BattleMode;
+import ua.lann.protankiserver.game.battles.models.InitBattlesListModel;
 import ua.lann.protankiserver.models.battle.BattleLimit;
 import ua.lann.protankiserver.game.protocol.packets.CodecRegistry;
 import ua.lann.protankiserver.game.protocol.packets.PacketId;
-import ua.lann.protankiserver.game.protocol.packets.codec.ICodec;
-import ua.lann.protankiserver.util.JsonUtils;
+import ua.lann.protankiserver.serialization.JsonUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,14 +34,10 @@ public class BattlesManager {
     public static void sendBattlesList(ClientController controller) {
         ByteBuf buf = Unpooled.buffer();
 
-        JsonArray battlesArray = new JsonArray();
-        for(BattleBase battle : battles.values()) battlesArray.add(JsonUtils.toJsonObject(battle.getBattleListInfo()));
+        InitBattlesListModel model = new InitBattlesListModel();
+        model.setBattles(battles.values().stream().map(BattleBase::getBattleListInfo).toList());
 
-        JsonObject object = new JsonObject();
-        object.add("battles", battlesArray);
-
-        ICodec<JsonObject> objectICodec = CodecRegistry.getCodec(JsonObject.class);
-        objectICodec.encode(buf, object);
+        CodecRegistry.getCodec(String.class).encode(buf, JsonUtils.toString(model, InitBattlesListModel.class));
 
         controller.sendPacket(PacketId.InitBattleList, buf);
         buf.release();
