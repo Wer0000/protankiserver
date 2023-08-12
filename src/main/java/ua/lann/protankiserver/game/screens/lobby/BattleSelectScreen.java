@@ -1,11 +1,13 @@
 package ua.lann.protankiserver.game.screens.lobby;
 
+import io.netty.buffer.Unpooled;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.Server;
 import ua.lann.protankiserver.game.battles.BattlesManager;
 import ua.lann.protankiserver.enums.Layout;
 import ua.lann.protankiserver.game.lobbychat.LobbyChat;
 import ua.lann.protankiserver.game.battles.MapManager;
+import ua.lann.protankiserver.game.protocol.packets.PacketId;
 import ua.lann.protankiserver.game.screens.ScreenBase;
 
 public class BattleSelectScreen extends ScreenBase {
@@ -30,6 +32,6 @@ public class BattleSelectScreen extends ScreenBase {
 
     @Override
     public void close() {
-
+        controller.sendPacket(PacketId.RemoveBattleList, Unpooled.buffer());
     }
 }

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.ClientController;
 import ua.lann.protankiserver.game.screens.auth.AuthorizationScreen;
 import ua.lann.protankiserver.game.screens.lobby.BattleSelectScreen;
+import ua.lann.protankiserver.game.screens.lobby.GarageScreen;
 
 import java.util.HashMap;
 
@@ -23,6 +24,7 @@ public class ScreenManager {
         screens = new HashMap<>();
         screens.put(AuthorizationScreen.class, new AuthorizationScreen(controller));
         screens.put(BattleSelectScreen.class, new BattleSelectScreen(controller));
+        screens.put(GarageScreen.class, new GarageScreen(controller));
     }
 
     public ScreenBase getScreenInstance(Class<? extends ScreenBase> screen) {

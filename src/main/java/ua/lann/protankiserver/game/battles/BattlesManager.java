@@ -26,6 +26,8 @@ public class BattlesManager {
 
     private static final HashMap<String, BattleBase> battles = new HashMap<>();
 
+    public static List<BattleBase> getBattles() { return battles.values().stream().toList(); }
+
     public static BattleBase getBattle(String battleId) {
         return battles.get(battleId);
     }

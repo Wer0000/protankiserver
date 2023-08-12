@@ -9,9 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.lann.protankiserver.enums.Achievement;
 import ua.lann.protankiserver.enums.Layout;
+import ua.lann.protankiserver.enums.Rank;
 import ua.lann.protankiserver.game.FriendsManager;
+import ua.lann.protankiserver.game.garage.GarageManager;
 import ua.lann.protankiserver.models.ClientLayout;
 import ua.lann.protankiserver.game.localization.Locale;
+import ua.lann.protankiserver.models.PlayerPermissionsBitfield;
 import ua.lann.protankiserver.models.profile.PlayerProfileManager;
 import ua.lann.protankiserver.orm.HibernateUtils;
 import ua.lann.protankiserver.orm.entities.Player;
@@ -35,6 +38,7 @@ public class ClientController {
 
     @Getter private Player player;
     @Getter private final PlayerProfileManager profileManager;
+    @Getter private final GarageManager garageManager;
 
     @Getter private final ScreenManager screenManager;
 
@@ -45,8 +49,63 @@ public class ClientController {
         this.friendsManager = new FriendsManager(this);
         this.profileManager = new PlayerProfileManager(this);
         this.screenManager = new ScreenManager(this);
+        this.garageManager = new GarageManager(this);
+
         layout = new ClientLayout();
         locale = Locale.Russian;
+    }
+
+    public void removeCrystals(int amount) {
+        addCrystals(-amount);
+    }
+
+    public void addCrystals(int amount) {
+        player.setCrystals(player.getCrystals() + amount);
+
+        ByteBuf buffer = Unpooled.buffer();
+        buffer.writeInt(player.getCrystals());
+
+        sendPacket(PacketId.UpdateCrystals, buffer);
+        buffer.release();
+    }
+
+    public void addExperience(int amount) {
+        Rank oldRank = player.getRank();
+        player.setExperience(player.getExperience() + amount);
+        Rank newRank = player.getRank();
+
+        ByteBuf buffer = Unpooled.buffer();
+
+        if(!oldRank.equals(newRank)) {
+            int rankNumber1 = oldRank.getNumber();
+            int rankNumber2 = newRank.getNumber();
+
+            int totalCrystalBonus = 0;
+            for(int i = rankNumber1 + 1; i <= rankNumber2; i++) {
+                totalCrystalBonus += Rank.getRankByNumber(i).crystalBonus;
+            }
+
+            buffer.writeInt(newRank.getNumber());
+            buffer.writeInt(player.getExperience());
+            buffer.writeInt(newRank.minExperience);
+            buffer.writeInt(newRank.maxExperience);
+            buffer.writeInt(totalCrystalBonus);
+
+            sendPacket(PacketId.UpdateRank, buffer);
+            buffer.clear();
+
+            addCrystals(totalCrystalBonus);
+
+            ByteBuf notifyBuffer = Unpooled.buffer();
+            notifyBuffer.writeInt(player.getRank().getNumber());
+            CodecRegistry.getCodec(String.class).encode(notifyBuffer, player.getNickname());
+
+            Server.getInstance().broadcast(PacketId.SetUserRankInfo, notifyBuffer);
+        }
+
+        buffer.writeInt(player.getExperience());
+        sendPacket(PacketId.UpdateScore, buffer);
+        buffer.release();
     }
 
     public void switchLayout() {

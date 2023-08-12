@@ -89,6 +89,10 @@ public class Server {
         }
     }
 
+    public void broadcast(PacketId packetId, ByteBuf buffer) {
+        controllers.values().forEach(x -> x.sendPacket(packetId, buffer));
+    }
+
     public void removeActiveController(ClientController controller) {
         this.controllers.remove(controller.getPlayer().getNickname());
         this.controllers.values().forEach(x -> {

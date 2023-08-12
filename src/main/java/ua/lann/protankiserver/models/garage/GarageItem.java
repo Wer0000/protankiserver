@@ -57,6 +57,10 @@ public class GarageItem implements Cloneable {
     // Kit
 //    @Json private GarageItemKit kit;
 
+    public boolean isEquippable() {
+        return type.equals(GarageItemType.Weapon) || type.equals(GarageItemType.Hull);
+    }
+
     @Override
     public GarageItem clone() {
         try {

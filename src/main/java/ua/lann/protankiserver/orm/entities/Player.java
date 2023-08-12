@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.hibernate.Session;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
+import ua.lann.protankiserver.models.PlayerPermissionsBitfield;
 import ua.lann.protankiserver.orm.HibernateUtils;
+import ua.lann.protankiserver.orm.converters.PlayerPermissionsBitfieldConverter;
 import ua.lann.protankiserver.orm.entities.garage.EquippedTankData;
 import ua.lann.protankiserver.orm.entities.garage.OwnedGarageItem;
 import ua.lann.protankiserver.security.BCryptHasher;
@@ -27,6 +29,10 @@ public class Player {
 
     @Getter @Setter
     @Column private int experience = 0;
+
+    @Getter @Setter
+    @Convert(converter = PlayerPermissionsBitfieldConverter.class)
+    @Column private PlayerPermissionsBitfield permissions = new PlayerPermissionsBitfield(0);
 
     @Getter @Setter
     @Enumerated(EnumType.STRING)
