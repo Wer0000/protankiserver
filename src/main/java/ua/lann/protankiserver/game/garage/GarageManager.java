@@ -18,6 +18,7 @@ import ua.lann.protankiserver.orm.entities.garage.BaseGarageItem;
 import ua.lann.protankiserver.orm.entities.garage.OwnedGarageItem;
 import ua.lann.protankiserver.orm.entities.garage.items.EquipmentGarageItem;
 import ua.lann.protankiserver.orm.entities.garage.items.PaintGarageItem;
+import ua.lann.protankiserver.orm.entities.garage.items.SupplyGarageItem;
 import ua.lann.protankiserver.serialization.JsonUtils;
 
 import java.util.ArrayList;
@@ -71,13 +72,22 @@ public class GarageManager {
             return;
         }
 
+        logger.info("Bought item {} for player {}", id + "_m" + targetItem.getModificationID(), player.getNickname());
+
+        if(targetItem.isCountable()) {
+            if(targetItem.getId().equals("health")) player.setHealthCount(player.getHealthCount() + amount);
+            if(targetItem.getId().equals("armor")) player.setArmorCount(player.getArmorCount() + amount);
+            if(targetItem.getId().equals("double_damage")) player.setDoubleDamageCount(player.getDoubleDamageCount() + amount);
+            if(targetItem.getId().equals("n2o")) player.setNitroCount(player.getNitroCount() + amount);
+            if(targetItem.getId().equals("mine")) player.setMineCount(player.getMineCount() + amount);
+            return;
+        }
+
         OwnedGarageItem ownedItem = getOwnedItem(id);
+        if(ownedItem != null) player.getOwnedItems().remove(ownedItem);
 
         controller.removeCrystals(actualPrice);
-        player.getOwnedItems().remove(ownedItem);
-        player.getOwnedItems().add(new OwnedGarageItem(id, targetItem.getModificationID()));
-
-        logger.info("Bought item {} for player {}", id + "_m" + targetItem.getModificationID(), player.getNickname());
+        player.getOwnedItems().add(new OwnedGarageItem(id, targetItem.getModificationID() == null ? 0 : targetItem.getModificationID()));
 
         if(targetItem.isEquippable()) setEquipped(id);
     }
@@ -117,7 +127,8 @@ public class GarageManager {
     public void sendOwnedItems() {
         InitGarageOwnedItems model = new InitGarageOwnedItems();
 
-        model.setItems(
+        model.setItems(new ArrayList<>());
+        model.getItems().addAll(
             GarageManager.getItems().stream()
                 .filter(x ->
                     controller.getPlayer().getOwnedItems().stream()
@@ -131,9 +142,17 @@ public class GarageManager {
                     GarageItem item = x.clone();
                     item.setName(x.getLocalizedData().getName(controller.getLocale()));
                     item.setDescription(x.getLocalizedData().getDescription(controller.getLocale()));
+
+                    if(item.getId().equals("health")) item.setCount(controller.getPlayer().getHealthCount());
+                    if(item.getId().equals("armor")) item.setCount(controller.getPlayer().getArmorCount());
+                    if(item.getId().equals("double_damage")) item.setCount(controller.getPlayer().getDoubleDamageCount());
+                    if(item.getId().equals("n2o")) item.setCount(controller.getPlayer().getNitroCount());
+                    if(item.getId().equals("mine")) item.setCount(controller.getPlayer().getMineCount());
+
                     return item;
                 }).toList()
         );
+
 
         ByteBuf buffer = Unpooled.buffer();
         CodecRegistry.getCodec(String.class).encode(buffer, JsonUtils.toString(model, InitGarageOwnedItems.class));
@@ -145,8 +164,11 @@ public class GarageManager {
     public void sendBuyableItems() {
         InitGarageBuyableItems model = new InitGarageBuyableItems();
         model.setItems(getItems().stream()
-            .filter(x -> !controller.getPlayer().getOwnedItems().contains(x))
-            .map(x -> {
+            .filter(x ->
+                controller.getPlayer().getOwnedItems().stream().noneMatch(y ->
+                    y.getItemId().equals(x.getId()) && (x.getModificationID() == null || x.getModificationID().equals(y.getModification()))
+                )
+            ).map(x -> {
                 GarageItem item = x.clone();
                 item.setName(x.getLocalizedData().getName(controller.getLocale()));
                 item.setDescription(x.getLocalizedData().getDescription(controller.getLocale()));
@@ -190,12 +212,24 @@ public class GarageManager {
 
                 items.add(_item);
             }
+
+            Query<SupplyGarageItem> querySupply = session.createQuery("FROM SupplyGarageItem ", SupplyGarageItem.class);
+            List<SupplyGarageItem> supplyGarageItems = querySupply.getResultList();
+
+            for(SupplyGarageItem item : supplyGarageItems) {
+                GarageItem _item = getGarageItem(item);
+
+                _item.setCountable(true);
+                _item.setCount(0);
+
+                items.add(_item);
+            }
         }
     }
 
     public GarageItem getGarageItem(String id, int mod) {
         return items.stream().filter(x ->
-            x.getId().equals(id) && x.getModificationID().equals(mod)
+            x.getId().equals(id) && (x.getModificationID() == null || x.getModificationID().equals(mod))
         ).findFirst().orElse(null);
     }
 

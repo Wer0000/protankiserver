@@ -42,6 +42,12 @@ public class Player {
     @JoinColumn(name = "equipment_id")
     private EquippedTankData equipment = new EquippedTankData("smoky", "hunter", "green");
 
+    @Getter @Setter @Column private int healthCount;
+    @Getter @Setter @Column private int armorCount;
+    @Getter @Setter @Column private int doubleDamageCount;
+    @Getter @Setter @Column private int nitroCount;
+    @Getter @Setter @Column private int mineCount;
+
     @Getter @Setter
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "owned_items")
@@ -49,7 +55,13 @@ public class Player {
         new OwnedGarageItem("smoky", 0),
         new OwnedGarageItem("hunter", 0),
         new OwnedGarageItem("green", 0),
-        new OwnedGarageItem("holiday", 0)
+        new OwnedGarageItem("holiday", 0),
+
+        new OwnedGarageItem("health", 0),
+        new OwnedGarageItem("armor", 0),
+        new OwnedGarageItem("double_damage", 0),
+        new OwnedGarageItem("n2o", 0),
+        new OwnedGarageItem("mine", 0)
     );
 
     @Getter
