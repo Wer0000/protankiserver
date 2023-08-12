@@ -74,7 +74,7 @@ public class Server {
             b.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .localAddress(new InetSocketAddress("0.0.0.0", PORT))
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
+//                .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childHandler(new ClientChannelInitializer());
 
             ChannelFuture f = b.bind().sync();
