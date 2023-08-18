@@ -19,7 +19,10 @@ public class LobbyChatSendMessage implements IHandler {
         String targetName = stringICodec.decode(buf);
         String message = stringICodec.decode(buf);
 
-        // Todo: add commands processing
+        if(message.startsWith("/")) {
+            Server.getInstance().getLobbyChat().processCommand(channel, message.substring(1));
+            return;
+        }
 
         ChatMessage msg = new ChatMessage();
 

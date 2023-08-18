@@ -12,6 +12,7 @@ import ua.lann.protankiserver.game.protocol.packets.PacketId;
 import ua.lann.protankiserver.game.protocol.packets.pipeline.PacketHandlerAdapter;
 import ua.lann.protankiserver.game.protocol.packets.pipeline.PacketProcessor;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
@@ -25,19 +26,23 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 
         channel.pipeline().addLast(new PacketProcessor());
         channel.pipeline().addLast(new PacketHandlerAdapter(controller, controller.getEncryption()));
-        channel.pipeline().addLast(new IdleStateHandler(0, 0, 30, TimeUnit.SECONDS));
 
         controller.sendPacketUnencrypted(PacketId.InitializeCrypto, controller.getEncryption().encryptionPacket());
     }
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
-        if(evt instanceof IdleStateEvent event) if(event.state() == IdleState.ALL_IDLE) ctx.close();
+    public void channelInactive(ChannelHandlerContext ctx) {
+        // TODO: This is not being called even though channel.isOpen and channel.isActive both false
+        // if you know what causes this issue tell me in discord @luminate_d or open an issue
+
+        logger.info("Channel is inactive!");
+        controller.Dispose();
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
-        logger.info("Channel is inactive!");
-        controller.Dispose();
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        // TODO: This is not being called even though channel.isOpen and channel.isActive both false
+        // if you know what causes this issue tell me in discord @luminate_d or open an issue
+        logger.error("Exception caught in pipeline:", cause);
     }
 }

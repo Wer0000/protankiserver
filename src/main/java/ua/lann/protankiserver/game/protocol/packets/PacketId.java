@@ -81,12 +81,21 @@ public enum PacketId {
 
     OpenGarage(-479046431),
     OpenGarageResponse(-324155151),
+    CloseGarage(1211186637),
+
+    OpenBattleList(1452181070),
+    RemoveBattleList(-324155151),
 
     InitGarageOwnedItems(-255516505),
     InitGarageBuyableItems(-300370823),
     SetGarageItemEquipped(2062201643),
     TryFit(1091756732),
-    EquipGarageItem(-1505530736);
+    BuyItem(-1961983005),
+    EquipGarageItem(-1505530736),
+
+    UpdateScore(2116086491),
+    UpdateRank(1989173907),
+    UpdateCrystals(-593513288);
 
     public final int packetId;
 

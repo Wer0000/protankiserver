@@ -7,7 +7,7 @@ public class LobbyChatConfiguration {
     public static final int EnterCost = 880;
 
     public static class Antiflood {
-        public static final boolean Enabled = true;
-        public static final boolean TypingSpeedAntifloodEnabled = true;
+        public static final boolean Enabled = false;
+        public static final boolean TypingSpeedAntifloodEnabled = false;
     }
 }

@@ -13,6 +13,7 @@ import ua.lann.protankiserver.orm.entities.garage.EquippedTankData;
 import ua.lann.protankiserver.orm.entities.garage.ResistancesEntity;
 import ua.lann.protankiserver.orm.entities.garage.items.EquipmentGarageItem;
 import ua.lann.protankiserver.orm.entities.garage.items.PaintGarageItem;
+import ua.lann.protankiserver.orm.entities.garage.items.SupplyGarageItem;
 
 public class HibernateUtils {
     private static final Logger logger = LoggerFactory.getLogger(HibernateUtils.class);
@@ -28,6 +29,7 @@ public class HibernateUtils {
         config.addAnnotatedClass(EquipmentGarageItem.class);
         config.addAnnotatedClass(PaintGarageItem.class);
         config.addAnnotatedClass(ResistancesEntity.class);
+        config.addAnnotatedClass(SupplyGarageItem.class);
 
         config.addAnnotatedClass(DiscountEntity.class);
         config.addAnnotatedClass(EquippedTankData.class);

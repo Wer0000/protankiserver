@@ -9,7 +9,6 @@ import lombok.Setter;
 import ua.lann.protankiserver.enums.GarageItemType;
 import ua.lann.protankiserver.game.garage.GarageItemPropertyConverter;
 import ua.lann.protankiserver.orm.entities.garage.BaseGarageItem;
-import ua.lann.protankiserver.orm.models.GarageItemProperty;
 import ua.lann.protankiserver.orm.models.GarageItemRawData;
 import ua.lann.protankiserver.orm.models.GarageItemRawProperty;
 import ua.lann.protankiserver.serialization.JsonUtils;

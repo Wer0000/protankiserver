@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.hibernate.Session;
 import ua.lann.protankiserver.enums.ChatModeratorLevel;
 import ua.lann.protankiserver.enums.Rank;
+import ua.lann.protankiserver.models.PlayerPermissionsBitfield;
 import ua.lann.protankiserver.orm.HibernateUtils;
+import ua.lann.protankiserver.orm.converters.PlayerPermissionsBitfieldConverter;
 import ua.lann.protankiserver.orm.entities.garage.EquippedTankData;
 import ua.lann.protankiserver.orm.entities.garage.OwnedGarageItem;
 import ua.lann.protankiserver.security.BCryptHasher;
@@ -29,12 +31,22 @@ public class Player {
     @Column private int experience = 0;
 
     @Getter @Setter
+    @Convert(converter = PlayerPermissionsBitfieldConverter.class)
+    @Column private PlayerPermissionsBitfield permissions = new PlayerPermissionsBitfield(0);
+
+    @Getter @Setter
     @Enumerated(EnumType.STRING)
     @Column private ChatModeratorLevel chatModeratorLevel = ChatModeratorLevel.None;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "equipment_id")
     private EquippedTankData equipment = new EquippedTankData("smoky", "hunter", "green");
+
+    @Getter @Setter @Column private int healthCount;
+    @Getter @Setter @Column private int armorCount;
+    @Getter @Setter @Column private int doubleDamageCount;
+    @Getter @Setter @Column private int nitroCount;
+    @Getter @Setter @Column private int mineCount;
 
     @Getter @Setter
     @ElementCollection(fetch = FetchType.EAGER)
@@ -43,7 +55,13 @@ public class Player {
         new OwnedGarageItem("smoky", 0),
         new OwnedGarageItem("hunter", 0),
         new OwnedGarageItem("green", 0),
-        new OwnedGarageItem("holiday", 0)
+        new OwnedGarageItem("holiday", 0),
+
+        new OwnedGarageItem("health", 0),
+        new OwnedGarageItem("armor", 0),
+        new OwnedGarageItem("double_damage", 0),
+        new OwnedGarageItem("n2o", 0),
+        new OwnedGarageItem("mine", 0)
     );
 
     @Getter
